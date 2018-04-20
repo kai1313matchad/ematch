@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+
+<html>
+
+     <head>
+     <!-- <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+      <script src="https://maps.googleapis.com/maps/api/js?sensor=false"></script> -->
+
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
+     </head>
+
+     <body>
+          <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script> 
+<script type="text/javascript"> 
+var geocoder = new google.maps.Geocoder();
+var latitude = -7.290973;
+var longitude = 112.730264;
+var latLng = new google.maps.LatLng(latitude,longitude);
+geocoder.geocode({       
+        latLng: latLng     
+        }, 
+        function(responses) 
+        {     
+            alert(latitude);
+           if (responses && responses.length > 0) 
+           {        
+               // alert(responses[0].formatted_address);  
+               $('#lat2').val(responses[0].formatted_address);   
+           } 
+           else 
+           {       
+             alert('Not getting Any address for given latitude and longitude.');     
+           }   
+        }
+);
+</script>
+<input type="text" name="" id="lat2">
+     </body>
+
+    
+
+</html>
