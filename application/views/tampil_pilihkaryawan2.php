@@ -44,7 +44,9 @@
 			                    </ul>
 			                 </li>
 	                <li><a href="<?php echo base_url(); ?>reportsubnext2">KPIM Plan Next Week</a></li>
-	                <li><a href="<?php echo base_url(); ?>karyawan/bobot">Master Bobot</a></li>
+	                 <?php if ($this->session->userdata('level') == 1 ){ ?>
+	                	<li><a href="<?php echo base_url(); ?>karyawan/bobot">Master Bobot</a></li>
+	                <?php } ?>
 	                <!-- <li><a href="<?php echo base_url(); ?>reportkaryawan">Grafik Report Karyawan</a></li> -->
 	                <a class="btn btn-success navbar-btn" href="<?php echo base_url(); ?>kpimmingguan/jadwalnilai" style="font-family: 'Exo 2', sans-serif; margin-left: 5px ">Jadwal Penilaian Terakhir KPIM</a>
 	                 <?php 

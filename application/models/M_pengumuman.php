@@ -48,7 +48,7 @@ public function getStatus($keystatus) {
         // $query = $this->db->get();
 
         $query = $this->db->query('SELECT *, group_concat(distinct nama_dept SEPARATOR ", ") as deptini FROM posting
-         join dept on find_in_set(dept.id_d, posting.tujuan_post) join karyawan on karyawan.id_karyawan = posting.id_karyawan
+         join dept on find_in_set(dept.id_dept, posting.tujuan_post) join karyawan on karyawan.id_karyawan = posting.id_karyawan
          -- where not karyawan.id_jabatan = 1 and not karyawan.id_jabatan = 5
          -- where posting.tgl_post >= DATE_SUB(NOW(),INTERVAL 12 MONTH)
          GROUP BY posting.id_post

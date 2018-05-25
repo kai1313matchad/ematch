@@ -181,58 +181,160 @@ Surabaya - East Java, 60241</li>
 									    <div class="form-group">
 									      <label class="control-label col-sm-2">Ditujukan Kepada:</label>
 									     	<div class="row" >
-											    <div class="col-sm-3" style="padding-right: 90px">
-											    	<div class="checkbox">
+									     		<div class="col-sm-9">
+									     			<div class="checkbox">
 													  <label><input type="checkbox" name="dept[]" value="15">Semua Departement </label>
 													</div>
+													<hr>
+									     		</div>
+									     		<div class="col-sm-2"></div>
+											    <div class="col-sm-3" style="padding-right: 90px">
+											    	Match Ad :
+											    	<br>
+
 													<div class="checkbox">
-													  <label><input type="checkbox" name="dept[]" value="1">IT</label>
+													  <label><input class="match" type="checkbox" name="dept[]" value="1">IT</label>
 													</div>
 													<div class="checkbox">
-													  <label><input type="checkbox" name="dept[]" value="2">HC</label>
+													  <label><input class="match" type="checkbox" name="dept[]" value="2">HC</label>
 													</div>
 													<div class="checkbox">
-													  <label><input type="checkbox" name="dept[]" value="3">PAT</label>
+													  <label><input class="match" type="checkbox" name="dept[]" value="3">PAT</label>
 													</div>
 													<div class="checkbox">
-													  <label><input type="checkbox" name="dept[]" value="4">GA</label>
+													  <label><input class="match" type="checkbox" name="dept[]" value="4">GA</label>
 													</div>
+													<div class="checkbox">
+													  <label><input class="match" type="checkbox" name="dept[]" value="5">Marketing </label>
+													</div>	
 												</div>
 
 												<div class="col-sm-3" style="padding-right: 90px">
 													<div class="checkbox">
-													  <label><input type="checkbox" name="dept[]" value="6">Finance</label>
+													  <label><input class="match" type="checkbox" name="dept[]" value="6">Finance</label>
 													</div>
 													<div class="checkbox">
-													  <label><input type="checkbox" name="dept[]" value="7">Logistic</label>
+													  <label><input class="match" type="checkbox" name="dept[]" value="7">Logistic</label>
 													</div>
 													<div class="checkbox">
-													  <label><input type="checkbox" name="dept[]" value="8">Production</label>
+													  <label><input class="match" type="checkbox" name="dept[]" value="8">Production</label>
 													</div>
 													<div class="checkbox">
-													  <label><input type="checkbox" name="dept[]" value="9">SITAC</label>
-													</div>
-													<div class="checkbox">
-													  <label><input type="checkbox" name="dept[]" value="10">Accounting</label>
+													  <label><input class="match" type="checkbox" name="dept[]" value="9">SITAC</label>
 													</div>
 												</div>
 
 
 												<div class="col-sm-3">
 													<div class="checkbox">
-													  <label><input type="checkbox" name="dept[]" value="5">Marketing </label>
+													  <label><input class="match" type="checkbox" name="dept[]" value="a">Accounting</label>
 													</div>
 													<div class="checkbox">
-													  <label><input type="checkbox" name="dept[]" value="11">Secretary</label>
+													  <label><input class="match" type="checkbox" name="dept[]" value="b">Secretary</label>
 													</div>
 													<div class="checkbox">
-													  <label><input type="checkbox" name="dept[]" value="12">Internal Audit</label>
+													  <label><input class="match" type="checkbox" name="dept[]" value="c">Internal Audit</label>
 													</div>
 													<div class="checkbox">
-													  <label><input type="checkbox" name="dept[]" value="13">WIPERINDO</label>
+													  <label><input class="match" type="checkbox" name="dept[]" value="l">Vendor</label>
+													</div>
+												</div>
+
+												<div class="col-sm-12"><hr></div>
+
+												<div class="col-sm-2"></div>
+											    <div class="col-sm-3" style="padding-right: 90px">
+											    	Wiperindo :
+											    	<br>
+
+													<div class="checkbox">
+													  <label><input class="wpi" type="checkbox" name="dept[]" value="w">IT</label>
 													</div>
 													<div class="checkbox">
-													  <label><input type="checkbox" name="dept[]" value="14">Tritunggal Metalworks</label>
+													  <label><input class="wpi" type="checkbox" name="dept[]" value="f">HC</label>
+													</div>
+													<div class="checkbox">
+													  <label><input class="wpi" type="checkbox" name="dept[]" value="g">PAT</label>
+													</div>
+													<div class="checkbox">
+													  <label><input class="wpi" type="checkbox" name="dept[]" value="h">GA</label>
+													</div>
+												</div>
+
+												<div class="col-sm-3" style="padding-right: 90px">
+													<div class="checkbox">
+												  <label><input class="wpi" type="checkbox" name="dept[]" value="i">Marketing </label>
+												</div>
+												<div class="checkbox">
+												  <label><input class="wpi" type="checkbox" name="dept[]" value="j">Finance</label>
+												</div>
+												<div class="checkbox">
+												  <label><input class="wpi" type="checkbox" name="dept[]" value="k">Logistic</label>
+												</div>
+												<div class="checkbox">
+												  <label><input class="wpi" type="checkbox" name="dept[]" value="d">Production</label>
+												</div>
+												</div>
+
+
+												<div class="col-sm-3">
+													<div class="checkbox">
+													  <label><input class="wpi" type="checkbox" name="dept[]" value="m">SITAC</label>
+													</div>
+													<div class="checkbox">
+													  <label><input class="wpi" type="checkbox" name="dept[]" value="n">Accounting</label>
+													</div>
+													<div class="checkbox">
+													  <label><input class="wpi" type="checkbox" name="dept[]" value="o">Secretary</label>
+													</div>
+												</div>
+
+												<div class="col-sm-12"><hr></div>
+
+												<div class="col-sm-2"></div>
+											    <div class="col-sm-3" style="padding-right: 90px">
+											    	KCT :
+											    	<br>
+
+													<div class="checkbox">
+													  <label><input class="kct" type="checkbox" name="dept[]" value="p">IT</label>
+													</div>
+													<div class="checkbox">
+													  <label><input class="kct" type="checkbox" name="dept[]" value="q">HC</label>
+													</div>
+													<div class="checkbox">
+													  <label><input class="kct" type="checkbox" name="dept[]" value="r">PAT</label>
+													</div>
+													<div class="checkbox">
+													  <label><input class="kct" type="checkbox" name="dept[]" value="s">GA</label>
+													</div>
+												</div>
+
+												<div class="col-sm-3" style="padding-right: 90px">
+													<div class="checkbox">
+													  <label><input class="kct" type="checkbox" name="dept[]" value="t">Marketing </label>
+													</div>
+													<div class="checkbox">
+													  <label><input class="kct" type="checkbox" name="dept[]" value="u">Finance</label>
+													</div>
+													<div class="checkbox">
+													  <label><input class="kct" type="checkbox" name="dept[]" value="v">Logistic</label>
+													</div>
+													<div class="checkbox">
+													  <label><input class="kct" type="checkbox" name="dept[]" value="e">Production</label>
+													</div>
+												</div>
+
+
+												<div class="col-sm-3">
+													<div class="checkbox">
+													  <label><input class="kct" type="checkbox" name="dept[]" value="x">SITAC</label>
+													</div>
+													<div class="checkbox">
+													  <label><input class="kct" type="checkbox" name="dept[]" value="y">Accounting</label>
+													</div>
+													<div class="checkbox">
+													  <label><input class="kct" type="checkbox" name="dept[]" value="z">Secretary</label>
 													</div>
 												</div>
 											</div>

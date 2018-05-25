@@ -318,7 +318,7 @@ class Karyawan extends CI_Controller {
     public function bobot(){
         $this->app_model->getLogin();
 
-        if ($this->session->userdata('level') == 2 || $this->session->userdata('level') == 11 || $this->session->userdata('level') == 12 || $this->session->userdata('level') == 6 ) {
+        if ($this->session->userdata('level') != 1 ) {
             $this->session->set_flashdata('message_name', 'Mohon maaf, Anda tidak dapat mengakses halaman Master Bobot');
             redirect(base_url() . 'home', 'refresh');
         }
