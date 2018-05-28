@@ -777,18 +777,18 @@ class Kpimmingguan extends CI_Controller {
 	public function update($key){
         $this->app_model->getLogin();
         date_default_timezone_set('Asia/Jakarta');
-        $tgl = date("y-m-d", strtotime($this->input->post('tgledit')));
-        $dead = date("y-m-d", strtotime($this->input->post('deadlineedit')));
+        // $tgl = date("y-m-d", strtotime($this->input->post('tgledit')));
+        // $dead = date("y-m-d", strtotime($this->input->post('deadlineedit')));
 
-        if ($dead < $tgl ) {
-            $status_dead = 3;
-        }
-        elseif ($dead > $tgl ) {
-            $status_dead = 1;   
-        }
-        elseif ($dead == $tgl ) {
-            $status_dead = 2;   
-        }
+        // if ($dead < $tgl ) {
+        //     $status_dead = 3;
+        // }
+        // elseif ($dead > $tgl ) {
+        //     $status_dead = 1;   
+        // }
+        // elseif ($dead == $tgl ) {
+        //     $status_dead = 2;   
+        // }
 
         $gl = $this->input->post('goaledit');
 
