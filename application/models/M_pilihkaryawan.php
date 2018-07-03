@@ -144,10 +144,32 @@ class M_pilihkaryawan extends CI_Model {
 
     }
 
+    public function untukall_($key, $idses, $hak_akses){
+        $this->db->from('karyawan a');
+        $this->db->join('dept b', 'FIND_IN_SET(b.id_dept, a.dept)');
+        $this->db->where('CONCAT(",", a.dept, ",") REGEXP ",('.$key.'),"');
+        $this->db->where_in('a.id_jabatan', $hak_akses);
+        $this->db->where_not_in('a.id_karyawan', $idses);
+        $this->db->where_not_in('a.id_jabatan', '1');
+        $this->db->where_not_in('a.id_jabatan', '5');
+        $this->db->where_not_in('a.status', 'Blokir');
+        $this->db->group_by('a.id_karyawan');
+        //$this->db->where("dept", $key);
+
+        $query = $this->db->get();
+
+        foreach ($query->result() as $row)
+        {   
+            echo "<option value=".$row->id_karyawan.">".$row->nama_karyawan."</option>";
+        }
+
+    }
+
     public function untukallterbaru($iddept, $idkar, $hak_akses){
         $this->db->select("*");
         $this->db->from("subordinate");
         $this->db->LIKE("b.dept", $iddept);
+        // $this->db->where("b.dept", $iddept);
         // $this->db->where_in('id_jabatan', $hak_akses);
         // $this->db->where_not_in('id_karyawan', $idkar);
         // $this->db->where_not_in('id_jabatan', '1');
@@ -156,6 +178,23 @@ class M_pilihkaryawan extends CI_Model {
          $this->db->join('karyawan a', 'a.id_karyawan = subordinate.id_penilai');
         $this->db->join('karyawan b', 'b.id_karyawan = subordinate.id_dinilai');
         $this->db->where("id_penilai", $idkar);
+
+        $query = $this->db->get();
+
+        foreach ($query->result() as $row)
+        {   
+            echo "<option value=".$row->id_karyawan.">".$row->nama_karyawan."</option>";
+        }
+
+    }
+
+    public function untukallterbaru_($iddept, $idkar, $hak_akses){
+        $this->db->from('karyawan a');
+        $this->db->join('subordinate b', 'b.id_dinilai = a.id_karyawan');
+        $this->db->join('dept c', 'FIND_IN_SET(c.id_dept, a.dept)');
+        $this->db->where('CONCAT(",", a.dept, ",") REGEXP ",('.$iddept.'),"');
+        $this->db->where('id_penilai', $idkar);
+        $this->db->group_by('a.id_karyawan');
 
         $query = $this->db->get();
 

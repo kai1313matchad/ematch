@@ -337,8 +337,50 @@ Surabaya - East Java, 60241</li>
 													  <label><input class="kct" type="checkbox" name="dept[]" value="z">Secretary</label>
 													</div>
 												</div>
+
+												<div class="col-sm-12"><hr></div>
+												<div class="col-sm-2"></div>
+											    <div class="col-sm-3" style="padding-right: 90px">
+											    	WIKLAN :
+											    	<br>
+
+													<div class="checkbox">
+													  <label><input class="kct" type="checkbox" name="dept[]" value="22">IT</label>
+													</div>
+													<div class="checkbox">
+													  <label><input class="kct" type="checkbox" name="dept[]" value="17">HC</label>
+													</div>
+												</div>
+
+												<div class="col-sm-3" style="padding-right: 90px">
+													<div class="checkbox">
+													  <label><input class="kct" type="checkbox" name="dept[]" value="16">Marketing </label>
+													</div>
+													<div class="checkbox">
+													  <label><input class="kct" type="checkbox" name="dept[]" value="20">Finance</label>
+													</div>
+													<div class="checkbox">
+													  <label><input class="kct" type="checkbox" name="dept[]" value="23">Secretary</label>
+													</div>
+												</div>
+
+
+												<div class="col-sm-3">
+													<div class="checkbox">
+													  <label><input class="kct" type="checkbox" name="dept[]" value="19">SITAC</label>
+													</div>
+													<div class="checkbox">
+													  <label><input class="kct" type="checkbox" name="dept[]" value="21">Accounting</label>
+													</div>
+													<div class="checkbox">
+													  <label><input class="kct" type="checkbox" name="dept[]" value="18">GA</label>
+													</div>
+												</div>
+
+												<div class="col-sm-12"><hr></div>
+												
 											</div>
-									    </div>
+									    </div>									    
 
 										<div class="form-group">  
 									    	<div class="col-sm-2">

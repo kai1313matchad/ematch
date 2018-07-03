@@ -341,6 +341,55 @@
 
 			</div>
 
+			<hr>
+
+			<div class="row">
+				<div class="col-sm-3" style="padding-top: 10px">
+				<h4>Departement WIKLAN :</h4>
+				</div>
+
+				<div class="col-lg-9">
+					<div class="checkbox">
+					  <label><input id="allwiklan" onclick="pilihdeptwiklan()" type="checkbox" value="">Pilih semua Dept. WIKLAN</label>
+					</div>
+				</div>
+
+			    <div class="col-sm-2" style="padding-right: 90px">
+					<div class="checkbox">
+					  <label><input class="wik" type="checkbox" name="dept[]" value="22">IT</label>
+					</div>
+					<div class="checkbox">
+					  <label><input class="wik" type="checkbox" name="dept[]" value="17">HC</label>
+					</div>
+					<div class="checkbox">
+					  <label><input class="wik" type="checkbox" name="dept[]" value="18">GA</label>
+					</div>
+									
+				</div>
+
+				<div class="col-sm-2" style="padding-right: 90px">
+					<div class="checkbox">
+					  <label><input class="wik" type="checkbox" name="dept[]" value="16">Marketing </label>
+					</div>
+					<div class="checkbox">
+					  <label><input class="wik" type="checkbox" name="dept[]" value="20">Finance</label>
+					</div>
+					<div class="checkbox">
+					  <label><input class="wik" type="checkbox" name="dept[]" value="23">Secretary</label>
+					</div>
+				</div>
+
+
+				<div class="col-sm-4">
+					<div class="checkbox">
+					  <label><input class="wik" type="checkbox" name="dept[]" value="19">SITAC</label>
+					</div>
+					<div class="checkbox">
+					  <label><input class="wik" type="checkbox" name="dept[]" value="21">Accounting</label>
+					</div>
+				</div>
+			</div>
+
 			<div class="row">
 				<div class="col-sm-3">
 					Foto Profil :<br>
@@ -427,6 +476,15 @@
 	    	}
 	    else {
 	        $('.kct').prop('checked', false);
+	    }
+	}
+
+	function pilihdeptwiklan(){
+		if ($('#allwiklan').prop('checked')) {
+	    	$('.wik').prop('checked', true);
+	    	}
+	    else {
+	        $('.wik').prop('checked', false);
 	    }
 	}
 	</script>

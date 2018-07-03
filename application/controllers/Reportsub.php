@@ -317,7 +317,7 @@ class Reportsub extends CI_Controller {
 
         
         $this->load->model('M_pilihkaryawan');
-        $result = $this->M_pilihkaryawan->untukall($key, $idses, $hak_akses);
+        $result = $this->M_pilihkaryawan->untukall_($key, $idses, $hak_akses);
         return $result;
         
 
@@ -343,7 +343,7 @@ class Reportsub extends CI_Controller {
         $hak_akses = explode(',', $hak);
 
         $this->load->model('M_pilihkaryawan');
-        $result = $this->M_pilihkaryawan->untukallterbaru($iddept, $idkar, $hak_akses);
+        $result = $this->M_pilihkaryawan->untukallterbaru_($iddept, $idkar, $hak_akses);
         return $result;
     }
 

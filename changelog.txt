@@ -1,1 +1,7 @@
-28052018
+02072018
+- Perbaikan untuk permintaan tambah departemen WIKLAN
+	modified:   application/controllers/Reportsub.php
+        	modified:   application/models/M_pilihkaryawan.php
+        	modified:   application/views/tampil_addkaryawan.php
+        	modified:   application/views/tampil_karyawan.php
+	modified:   application/views/tampil_pengumuman.php

@@ -441,6 +441,53 @@
 
 		<hr>
 
+		<div class="row jarak">
+			<div class="col-lg-4">
+				<div style="font-size: 20px">Departement WIKLAN:</div>
+			</div>
+
+			<div class="col-lg-8">
+				<div class="checkbox">
+				  <label><input id="allwiklan<?php echo $u->id_karyawan ?>" onclick="pilihdeptwiklan(<?php echo $u->id_karyawan ?>)" type="checkbox" value="">Pilih semua Dept. WIKLAN</label>
+				</div>
+			</div>
+
+			<div class="col-lg-8 col-lg-offset-4">
+				 <div class="col-sm-2" style="padding-right: 90px">
+					<div class="checkbox">
+					  <label><input class="pilihandept wiklan<?php echo $u->id_karyawan ?>" type="checkbox" name="dept[]" value="22" <?php if(in_array("22", $id_deptku)) {echo 'CHECKED';}; ?>>IT</label>
+					</div>
+					<div class="checkbox">
+					  <label><input class="pilihandept wiklan<?php echo $u->id_karyawan ?>" type="checkbox" name="dept[]" value="17" <?php if(in_array("17", $id_deptku)) {echo 'CHECKED';}; ?>>HC</label>
+					</div>
+					<div class="checkbox">
+					  <label><input class="pilihandept wiklan<?php echo $u->id_karyawan ?>" type="checkbox" name="dept[]" value="18" <?php if(in_array("18", $id_deptku)) {echo 'CHECKED';}; ?>>GA</label>
+					</div>
+					<div class="checkbox">
+					  <label><input class="pilihandept wiklan<?php echo $u->id_karyawan ?>" type="checkbox" name="dept[]" value="16" <?php if(in_array("16", $id_deptku)) {echo 'CHECKED';}; ?>>Marketing </label>
+					</div>	
+					
+				</div>
+
+				<div class="col-sm-2" style="padding-right: 90px">
+					<div class="checkbox">
+					  <label><input class="pilihandept wiklan<?php echo $u->id_karyawan ?>" type="checkbox" name="dept[]" value="20" <?php if(in_array("20", $id_deptku)) {echo 'CHECKED';}; ?>>Finance</label>
+					</div>
+					<div class="checkbox">
+					  <label><input class="pilihandept wiklan<?php echo $u->id_karyawan ?>" type="checkbox" name="dept[]" value="19" <?php if(in_array("19", $id_deptku)) {echo 'CHECKED';}; ?>>SITAC</label>
+					</div>
+					<div class="checkbox">
+					  <label><input class="pilihandept wiklan<?php echo $u->id_karyawan ?>" type="checkbox" name="dept[]" value="21" <?php if(in_array("21", $id_deptku)) {echo 'CHECKED';}; ?>>Accounting</label>
+					</div>
+					<div class="checkbox">
+					  <label><input class="pilihandept wiklan<?php echo $u->id_karyawan ?>" type="checkbox" name="dept[]" value="23" <?php if(in_array("23", $id_deptku)) {echo 'CHECKED';}; ?>>Secretary</label>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<hr>
+
 		<div class="row" style="padding-bottom: 5px">
 				<div class="col-sm-4">
 					Status :
@@ -573,6 +620,15 @@
 		    	}
 		    else {
 		        $('.kct' + a).prop('checked', false);
+		    }
+		}
+
+		function pilihdeptwiklan(a){
+		    if ($('#allwiklan' + a).prop('checked')) {
+		    	$('.wiklan' + a).prop('checked', true);
+		    	}
+		    else {
+		        $('.wiklan' + a).prop('checked', false);
 		    }
 		}
 
