@@ -136,6 +136,7 @@ Surabaya - East Java, 60241</li>
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown"><span data-hover="<?php echo $this->session->userdata('username'); ?>"><?php echo $this->session->userdata('username'); ?></span> <b class="caret"></b></a>
 							<ul class="dropdown-menu agile_short_dropdown">
 								<li><a href="<?php echo base_url();?>Profil">Profil</a></li>
+								<li><a href="<?php echo base_url();?>Ebank">E-filling</a></li>
 								<li><a href="<?php echo base_url();?>login/logout">Logout</a></li>
 							</ul>
 						</li>
