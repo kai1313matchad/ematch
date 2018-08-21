@@ -133,6 +133,39 @@ input[type=text]:focus {
     });
     
     </script>
+    <script>
+        $(document).ready(function() {
+            kirim_reminder();
+        });
+        function kirim_reminder()
+        {
+            $.ajax({
+            url : '<?php echo base_url('projectreminder/Crud/get_reminder')?>',
+            type: "POST",
+            data: $('#sch_form').serialize(),
+            dataType: "JSON",
+            success: function(data)
+                {
+                   if(data.length != null)
+                    {
+                        for (var i = 0; i < data.length; i++) 
+                        {
+                            id = data[i]["id_reminder"];
+                            $.ajax({
+                            url : "<?php echo base_url('projectreminder/Crud/kirim_email/')?>"+id,
+                            type : "POST",
+                            data: data
+                            })                      
+                        }
+                    }  
+                },
+            error: function (jqXHR, textStatus, errorThrown)
+                {
+                    alert('Tidak Ada Data Reminder');
+                }
+            });
+        }
+    </script>
 
 </body>
 
