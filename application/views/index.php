@@ -34,6 +34,15 @@ License URL: http://creativecommons.org/licenses/by/3.0/
       /*  padding-bottom: 25%; // This is the aspect ratio*/
         overflow: hidden;
     }
+
+    .navbar-brand {
+	  padding: 0px;
+	}
+	.navbar-brand>img {
+	  height: 100%;
+	  padding: 0px;
+	  width: auto;
+	}
    
 
     @media (max-width: 991px){
@@ -121,7 +130,9 @@ Surabaya - East Java, 60241</li>
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 				</button>
-				<h1><a class="navbar-brand" href="<?= base_url();?>index"><span>E-Match </span>Ad</a></h1>
+				<!-- <h1><a class="navbar-brand" href="<?= base_url();?>index"><span>E-Match </span>Ad</a></h1> -->
+				<a class="navbar-brand" href="<?= base_url();?>"><img class="img-responsive" src="<?php echo base_url()?>assets/img/logo.png">
+            </a>
 			</div>
 			<!-- Collect the nav links, forms, and other content for toggling -->
 			<div class="collapse navbar-collapse navbar-right" id="bs-example-navbar-collapse-1">
