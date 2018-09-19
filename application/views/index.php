@@ -392,6 +392,118 @@ Surabaya - East Java, 60241</li>
 					</div>
 				</div>
 			</div>
+
+			<div class="col-md-12 w3_banner_bottom_icons_right">
+				<div style="display: block; padding:5px 0px 5px 0px  ">
+					<span class="menunya"><button class="btn btn-default" id="showwiklan" style="font-family: 'Exo 2', sans-serif; width: 200px"><img src="<?php echo base_url(); ?>assets/img/wiklanlogo.png" width='auto' height='30px'></button></span>
+					<span class="menunya"><button class="btn btn-default iniwiklan" id="hidewiklan" style="font-family: 'Exo 2', sans-serif; display: none"><img src="<?php echo base_url(); ?>assets/img/hide.png" width='auto' height='30px'></button></span>
+					<text style="float: right; padding-top: 5px"><h3 class="judul"><span>Media sosial WIKLAN</span></h3></text>
+				</div>
+
+				<div class="iniwiklan" style="display: none">
+					<div class="col-xs-3 w3_banner_bottom_icons1">
+						<div class="w3_banner_bottom_icons1_effect">
+							<a href="https://www.facebook.com/wiklanindonesia" target="_blank">
+							<i class="fa-facebook" style="background: #3B5998;"></i>
+							<h3>WIKLAN</h3>
+							<p>Facebook WIKLAN</p>
+							</a>
+						</div>
+					</div>
+					<div class="col-xs-3 w3_banner_bottom_icons1">
+						<div class="w3_banner_bottom_icons1_effect">
+							<a href="https://twitter.com/wiklanindonesia" target="_blank">
+							<i class="fa-twitter" style="background: #55ACEE;"></i>
+							<h3>WIKLAN</h3>
+							<p>Twitter WIKLAN</p>
+							</a>
+						</div>
+					</div>
+					<div class="col-xs-3 w3_banner_bottom_icons1">
+						<div class="w3_banner_bottom_icons1_effect">
+							<a href="https://www.instagram.com/wiklanindonesia/" target="_blank">
+							<i class="fa-instagram" style="background: #e51d5d;"></i>
+							<h3>WIKLAN</h3>
+							<p>Instagram WIKLAN</p>
+							</a>
+						</div>
+					</div>
+					<div class="col-xs-3 w3_banner_bottom_icons1">
+						<div class="w3_banner_bottom_icons1_effect">
+							<a href="https://www.linkedin.com/in/wiklan-indonesia-77b2b9166/" target="_blank">
+							<i class="fa-linkedin" style="background: #007bb5;"></i>
+							<h3>WIKLAN</h3>
+							<p>LinkedIn WIKLAN</p>
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-md-12 w3_banner_bottom_icons_right">
+				<div style="display: block; padding:5px 0px 5px 0px  ">
+					<span class="menunya"><button class="btn btn-default" id="showrcp" style="font-family: 'Exo 2', sans-serif; width: 200px"><img src="<?php echo base_url(); ?>assets/img/rcplogo.jpg" width='auto' height='30px'></button></span>
+					<span class="menunya"><button class="btn btn-default inircp" id="hidercp" style="font-family: 'Exo 2', sans-serif; display: none"><img src="<?php echo base_url(); ?>assets/img/hide.png" width='auto' height='30px'></button></span>
+					<text style="float: right; padding-top: 5px"><h3 class="judul"><span>Media sosial RCP</span></h3></text>
+				</div>
+
+				<div class="inircp" style="display: none">
+					<div class="col-xs-2 w3_banner_bottom_icons1">
+						<div class="w3_banner_bottom_icons1_effect">
+							<a href="https://www.facebook.com/Raja.Cahaya.Prima/" target="_blank">
+							<i class="fa-facebook" style="background: #3B5998;"></i>
+							<h3>RCP</h3>
+							<p>Facebook RCP</p>
+							</a>
+						</div>
+					</div>
+					<div class="col-xs-2 w3_banner_bottom_icons1">
+						<div class="w3_banner_bottom_icons1_effect">
+							<a href="https://www.instagram.com/eseledindonesia/" target="_blank">
+							<i class="fa-instagram" style="background: #e51d5d;"></i>
+							<h3>RCP</h3>
+							<p>Instagram RCP</p>
+							</a>
+						</div>
+					</div>
+					<div class="col-xs-2 w3_banner_bottom_icons1">
+						<div class="w3_banner_bottom_icons1_effect">
+							<a href="https://www.tokopedia.com/eseled" target="_blank">
+							<i class="fa-rss" style="background: #44B64B;"></i>
+							<h3>RCP</h3>
+							<p>Tokopedia RCP</p>
+							</a>
+						</div>
+					</div>
+					<div class="col-xs-2 w3_banner_bottom_icons1">
+						<div class="w3_banner_bottom_icons1_effect">
+							<a href="https://www.bukalapak.com/u/eseled" target="_blank">
+							<i class="fa-rss" style="background: #EF1551;"></i>
+							<h3>RCP</h3>
+							<p>Bukalapak RCP</p>
+							</a>
+						</div>
+					</div>
+					<div class="col-xs-2 w3_banner_bottom_icons1">
+						<div class="w3_banner_bottom_icons1_effect">
+							<a href="https://shopee.co.id/eseled" target="_blank">
+							<i class="fa-rss" style="background: #E85205;"></i>
+							<h3>RCP</h3>
+							<p>Shopee RCP</p>
+							</a>
+						</div>
+					</div>
+					<div class="col-xs-2 w3_banner_bottom_icons1">
+						<div class="w3_banner_bottom_icons1_effect">
+							<a href="https://www.olx.co.id/all-results/user/4mCGP/" target="_blank">
+							<i class="fa-rss" style="background: #662288;"></i>
+							<h3>RCP</h3>
+							<p>OLX RCP</p>
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
 				<!-- <div class="col-xs-3 w3_banner_bottom_icons1">
 					<div class="w3_banner_bottom_icons1_effect">
 						<a href="https://accounts.google.com/" target="_blank">
@@ -951,7 +1063,30 @@ Surabaya
 	</div>
 	<!-- //footer -->
 
+<script> //ini untuk hide show rcp
+	$(document).ready(function(){
+	    $("#hidercp").click(function(){
+	        $(".inircp").hide(1000);
+	    });
+	    $("#showrcp").click(function(){
+	        $(".inircp").show(1000);
+	    });
 
+	   
+	});
+</script>
+<script> //ini untuk hide show wiklan
+	$(document).ready(function(){
+	    $("#hidewiklan").click(function(){
+	        $(".iniwiklan").hide(1000);
+	    });
+	    $("#showwiklan").click(function(){
+	        $(".iniwiklan").show(1000);
+	    });
+
+	   
+	});
+</script>
 <script> //ini untuk hide show wiper
 	$(document).ready(function(){
 	    $("#hidewiper").click(function(){
