@@ -30,7 +30,7 @@
 	            <ul class="nav navbar-nav">
 	                
 	                <li><a href="<?php echo base_url();?>reportsub">KPIM Report Subordinate Mingguan</a></li>
-	                <li class="active"><a href="#">KPIM Plan Next Week</a></li>
+	                <li class="active"><a href="#">KPIM Plan Next</a></li>
 	                <li><a href="<?php echo base_url(); ?>karyawan/bobot">Master Bobot</a></li>
 	                <!-- <li><a href="<?php echo base_url(); ?>reportkaryawan">Grafik Report Karyawan</a></li> -->
 	                <a class="btn btn-warning navbar-btn" href="<?php echo base_url(); ?>kpimmingguan/jadwalnilai" style="font-family: 'Exo 2', sans-serif; margin-left: 5px ">Jadwal Penilaian Terakhir KPIM</a>

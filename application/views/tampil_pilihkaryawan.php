@@ -43,7 +43,7 @@
 			                        <li><a href="<?php echo base_url(); ?>reportsub2">Report Subordinate yang sudah dinilai</a></li>
 			                    </ul>
 			                 </li>
-	                <li><a href="<?php echo base_url(); ?>reportsubnext2">KPIM Plan Next Week</a></li>
+	                <li><a href="<?php echo base_url(); ?>reportsubnext2">KPIM Plan Next</a></li>
 	                <?php if ($this->session->userdata('level') == 1 ){ ?>
 	                	<li><a href="<?php echo base_url(); ?>karyawan/bobot">Master Bobot</a></li>
 	                <?php } ?>

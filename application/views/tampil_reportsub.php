@@ -284,7 +284,7 @@ if (isset($tgl_akhir)) {
 						<th style="text-align: center;">No</th>
 						<th style="text-align: center;">Hari/Tgl</th>
 						<th style="text-align: center;">Goal</th>
-						<th style="text-align: center;">Action</th>
+						<th style="text-align: center;">Description</th>
 						<th style="text-align: center;">Kendala</th>
 						<th style="text-align: center;">Result</th>
 						<th style="text-align: center;">Deadline</th>
@@ -459,7 +459,7 @@ if (isset($tgl_akhir)) {
 			<div class="row">
 			  	<div class="col-sm-4" style="text-align: center;">
 					
-						<h4>Action :</h4>
+						<h4>Description :</h4>
 					
 			 	</div>
 				<div class="col-sm-8">
@@ -1222,7 +1222,7 @@ if (isset($tgl_akhir)) {
 			2. Total nilai maksimal persentase KPIM adalah 75%<br>
 			3. Standart bobot penilaian KPIM ditentukan oleh masing - masing departement<br>
 			4. Standart penilaian KPIM karyawan (aktual) dilihat dari selesai dikerjakan, masih proses atau tidak dikerjakannya suatu goals<br>
-			5. Penilaian juga dipertimbangkan berdasarkan Goals, Action, Result dan Deadline<br>
+			5. Penilaian juga dipertimbangkan berdasarkan Goals, Description, Result dan Deadline<br>
 			6. Untuk Goals yang tidak tercapai pada minggu I harus tetap di cantumkan di KPIM minggu<br>
 			7. Plannext Week (Rencana kegiatan/pekerjaan pekan depan) wajib diisi<br></text>
 			</p>

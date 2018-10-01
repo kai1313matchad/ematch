@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 
-<title>Notifikasi KPIM Online - Plan Next Week</title>
+<title>Notifikasi KPIM Online - Plan Next</title>
 <link rel="icon" href="<?=base_url()?>/favicon.gif" type="image/gif">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -51,7 +51,7 @@
 	        <div class="collapse navbar-collapse">
 	            <ul class="nav navbar-nav">
 	            	<li><a href="<?php echo base_url(); ?>kpimmingguan">KPIM Mingguan</a></li>
-	                <li><a href="<?php echo base_url(); ?>kpimmingguannext">KPIM Plan Next Week</a></li>
+	                <li><a href="<?php echo base_url(); ?>kpimmingguannext">KPIM Plan Next</a></li>
 	                		<li class="dropdown">
 	                			<?php
 									foreach ($inboxblmbaca as $total)
@@ -111,7 +111,7 @@
 									</div>
 									<?php }?>
 			                        </a></li>
-			                        <li><a href="<?php echo base_url(); ?>kpimmingguan/replykpimnext">KPIM Plan Next Week
+			                        <li><a href="<?php echo base_url(); ?>kpimmingguan/replykpimnext">KPIM Plan Next
 			                        <?php if(isset($totalplan->jumlah)){ ?>
 
 

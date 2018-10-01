@@ -114,7 +114,7 @@ date_default_timezone_set('Asia/Jakarta');
 			                    </ul>
 	            	</li>
 	                <!-- <li class="active"><a href="#">KPIM Mingguan</a></li> -->
-	                <li><a href="<?php echo base_url(); ?>kpimmingguannext">KPIM Plan Next Week</a></li>
+	                <li><a href="<?php echo base_url(); ?>kpimmingguannext">KPIM Plan Next</a></li>
 	                		<li class="dropdown">
                 				<?php
 									foreach ($inboxblmbaca as $total)
@@ -176,7 +176,7 @@ date_default_timezone_set('Asia/Jakarta');
 									</div>
 									<?php }?>
 			                        </a></li>
-			                        <li><a href="<?php echo base_url(); ?>kpimmingguan/replykpimnext">KPIM Plan Next Week
+			                        <li><a href="<?php echo base_url(); ?>kpimmingguan/replykpimnext">KPIM Plan Next
 			                        <?php if(isset($totalplan->jumlah)){ ?>
 
 
@@ -772,7 +772,7 @@ if ($this->session->userdata('harikerja') == 5 ) {
 				<!--action-->
 				<div class="col-md-3">
 					
-					<textarea class="form-control jarak" rows="4" cols="30" placeholder="Action" name="action" id="action" required oninvalid="this.setCustomValidity('Tidak boleh kosong')" oninput="setCustomValidity('')"></textarea>
+					<textarea class="form-control jarak" rows="4" cols="30" placeholder="Description" name="action" id="action" required oninvalid="this.setCustomValidity('Tidak boleh kosong')" oninput="setCustomValidity('')"></textarea>
 				</div>
 				<!--Kendala-->
 				<div class="col-md-2">
@@ -887,7 +887,7 @@ if ($this->session->userdata('harikerja') == 5 ) {
 			<?php }
 			else {?>
 
-			<h4><span style="font-style: italic; color: red;">Karena sebelumnya Anda tidak input KPIM Plannext week untuk hari ini, <br> maka mohon maaf, hari ini Anda tidak dapat input KPIM. </span><br><br> Silahkan input KPIM Plannext week untuk besok dan yang akan datang <a href="<?php echo base_url(); ?>kpimmingguannext">di sini</a></h4>
+			<h4><span style="font-style: italic; color: red;">Karena sebelumnya Anda tidak input KPIM Plannext untuk hari ini, <br> maka mohon maaf, hari ini Anda tidak dapat input KPIM. </span><br><br> Silahkan input KPIM Plannext untuk besok dan yang akan datang <a href="<?php echo base_url(); ?>kpimmingguannext">di sini</a></h4>
 
 		<?php } ?>
 		<!-- ini selesai validasi input plannext atau tdk -->
@@ -904,7 +904,7 @@ if ($this->session->userdata('harikerja') == 5 ) {
 						<th style="text-align: center;">No</th>
 						<th style="text-align: center;">Hari/Tanggal</th>
 						<th style="text-align: center;">Goal</th>
-						<th style="text-align: center;">Action</th>
+						<th style="text-align: center;">Description</th>
 						<th style="text-align: center;">Kendala</th>
 						<th style="text-align: center;">Result</th>
 						<th style="text-align: center;">Deadline</th>
@@ -1083,13 +1083,13 @@ if ($this->session->userdata('harikerja') == 5 ) {
 							<div class="row">
 							  	<div class="col-sm-4">
 									<div class="col-lg-8">
-										<h4>Action :</h4>
+										<h4>Description :</h4>
 									</div>
 							 	</div>
 								<div class="col-sm-8">
 									<div class="col-lg-10 ">
 										<!--<input type="text" class="form-control" id="action" name="actionedit">!-->
-										<textarea class="form-control" rows="4" id="action" name="actionedit" placeholder="Action" required><?php echo $u->action ?></textarea>
+										<textarea class="form-control" rows="4" id="action" name="actionedit" placeholder="Description" required><?php echo $u->action ?></textarea>
 									</div>
 								</div>
 							</div>
@@ -1331,7 +1331,7 @@ if ($this->session->userdata('harikerja') == 5 ) {
 						<button type="button" class="btn btn-warning" style="font-family: 'Exo 2'; margin-top:5px"  data-toggle="modal" data-target="#myModalsend">Send</button>
 						
 		  </div>
-		  <div class="col-sm-2 text-right"><a class= "btn btn-primary" href="<?php echo base_url(); ?>kpimmingguannext" style="font-family: 'Exo 2', sans-serif; font-style: italic; margin-top:5px"><h7>Plan Next Week </h7><span class="glyphicon glyphicon-arrow-right"></span></a></div>
+		  <div class="col-sm-2 text-right"><a class= "btn btn-primary" href="<?php echo base_url(); ?>kpimmingguannext" style="font-family: 'Exo 2', sans-serif; font-style: italic; margin-top:5px"><h7>Plan Next </h7><span class="glyphicon glyphicon-arrow-right"></span></a></div>
 		</div>
 
 		<div class="row">
@@ -1545,7 +1545,7 @@ if ($this->session->userdata('harikerja') == 5 ) {
 						<tr >
 							<td style="width: 20px;">2. </td>
 							<td><div style="background-color:  #f79d00; width: 30px; height: 30px; border:black 1px solid; "></div></td>
-							<td>&nbsp; Warna Orange adalah input kpim hari ini dari inputan plannext week yang harus diedit (disesuaikan serta diisi kolom result dan nilainya)</td>
+							<td>&nbsp; Warna Orange adalah input kpim hari ini dari inputan plannext yang harus diedit (disesuaikan serta diisi kolom result dan nilainya)</td>
 						</tr>
 						<tr>
 							<td style="width: 20px;">3. </td>
@@ -1564,9 +1564,9 @@ if ($this->session->userdata('harikerja') == 5 ) {
 			2. Total nilai maksimal persentase KPIM adalah 75%<br>
 			3. Standart bobot penilaian KPIM ditentukan oleh masing - masing departement<br>
 			4. Standart penilaian KPIM karyawan (aktual) dilihat dari selesai dikerjakan, masih proses atau tidak dikerjakannya suatu goals<br>
-			5. Penilaian juga dipertimbangkan berdasarkan Goals, Action, Result dan Deadline<br>
+			5. Penilaian juga dipertimbangkan berdasarkan Goals, Description, Result dan Deadline<br>
 			6. Untuk Goals yang tidak tercapai pada minggu I harus tetap di cantumkan di KPIM minggu<br>
-			7. Plannext Week (Rencana kegiatan/pekerjaan pekan depan) wajib diisi<br></text>
+			7. Plannext(Rencana kegiatan/pekerjaan) wajib diisi<br></text>
 			</p>
 		      </div>
 			</div>
