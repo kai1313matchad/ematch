@@ -209,7 +209,7 @@ class Karyawan extends CI_Controller {
         // redirect(base_url(). 'karyawan/subordinate' , 'refresh');
     }
 
-     public function hapussubordinate($key){
+    public function hapussubordinate($key){
         $this->app_model->getLogin();
         $this->db->delete('subordinate', array('id_penilai' => $key));
         redirect(base_url() . 'karyawan/subordinate', 'refresh');
@@ -415,6 +415,23 @@ class Karyawan extends CI_Controller {
 
         $this->load->view('tampil_m_bobot',$data);
         
+    }
+
+    public function tesmasterbobot()
+    {
+        $this->app_model->getLogin();
+        if ($this->session->userdata('level') != 1 )
+        {
+            $this->session->set_flashdata('message_name', 'Mohon maaf, Anda tidak dapat mengakses halaman Master Bobot');
+            redirect(base_url() . 'home', 'refresh');
+        }
+        $data['profilku']=$this->M_kpimmingguan->getdataku()->result();
+        $keyjabatan=$this->session->userdata('id_karyawan');
+        $data['jabatan']=$this->M_reportsub->getJabatan($keyjabatan);
+        $keydept=$this->session->userdata('id_karyawan');
+        $data['dept']=$this->M_kpimmingguan->getDept($keydept);
+        $data['isinamadept']=$this->db->get('dept');
+        $this->load->view('tampil_m_bobot_new',$data);
     }
 
     public function ambildatabobot(){
