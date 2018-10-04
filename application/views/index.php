@@ -726,7 +726,7 @@ Surabaya - East Java, 60241</li>
 			<div class="col-md-4 w3_banner_bottom_icons_left hover15">
 				<div class="w3_agile_banner_bottom">
 					<figure>
-					<a href="<?php echo base_url(); ?>matchAD2/login.php" ><img src="<?php echo base_url(); ?>assets/img/match-terpadu.png" alt=" " class="img-responsive" title="Aplikasi Match Terpadu" /></a>
+					<a href="<?php echo base_url(); ?>matchterpadu" ><img src="<?php echo base_url(); ?>assets/img/match-terpadu.png" alt=" " class="img-responsive" title="Aplikasi Match Terpadu" /></a>
 					</figure>
 				</div>
 			</div>
