@@ -522,6 +522,12 @@ class Karyawan extends CI_Controller {
         redirect(base_url(). 'karyawan/bobot' , 'refresh');
     }
 
+    public function simpan_bobot()
+    {
+        $this->app_model->getLogin();
+        date_default_timezone_set('Asia/Jakarta');
+    }
+
     public function hapusbobot($key){
         $this->app_model->getLogin();
         $this->db->delete('master_bobot', array('id_bobot' => $key));

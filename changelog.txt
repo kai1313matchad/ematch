@@ -1,3 +1,9 @@
+05102018
+- tambah kolom tabel master bobot
+	ALTER TABLE `master_bobot`
+	ADD COLUMN `sts_bobot` CHAR(1) NULL DEFAULT NULL AFTER `tgl_diinput`,
+	ADD COLUMN `fix_dl` INT NULL DEFAULT NULL AFTER `sts_bobot`,
+	ADD COLUMN `custom_dl` DATE NULL DEFAULT NULL AFTER `fix_dl`;
 02072018
 - Perbaikan untuk permintaan tambah departemen WIKLAN
 	modified:   application/controllers/Reportsub.php
