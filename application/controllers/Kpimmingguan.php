@@ -125,7 +125,7 @@ class Kpimmingguan extends CI_Controller {
             $periode = "Laporan Periode Bulan ini :";
         }
         
-        $data['daterange'] = date_range($tglstart, $tglend); 
+        $data['daterange'] = date_range($tglstart, $tglend);
         
         $data['harilibur'] = $this->M_pengumuman->ambil_libur()->result();
 
@@ -138,6 +138,65 @@ class Kpimmingguan extends CI_Controller {
         $this->load->view('tampil_kpim',$data);
 
 	}
+
+    public function test_()
+    {
+        $key = $this->session->userdata('id_karyawan');
+        $data['inboxblmbaca'] = $this->M_kpimmingguan->inboxblmbaca()->result();
+        $data['noteblmbaca'] = $this->M_kpimmingguan->noteblmbaca()->result();
+        $data['planblmbaca'] = $this->M_kpimmingguan->planblmbaca()->result();
+        $data['noteplan'] = $this->M_kpimmingguan->noteplan()->result();
+        $data['profilku'] = $this->M_kpimmingguan->getdataku()->result();
+        $data['jabatan'] = $this->M_kpimmingguan->getJabatan($key);
+        $data['deptbaru'] = $this->M_kpimmingguan->ambilDept($key);
+        $data['nilaiku'] = $this->M_kpimmingguan->getnilaiku()->result();
+        $data['harilibur'] = $this->M_pengumuman->ambil_libur()->result();
+        $data['tdkinput'] = $this->M_kpimmingguan->tdkinput()->result();
+        $data['table'] = $this->M_kpimmingguan->getAll()->result();
+        $data['tableplannext'] = $this->M_kpimmingguannext->getAllreplykpimnext()->result();
+        $data['susunansub'] = $this->M_karyawanku->getsubordinate()->result();
+        // interval hari
+        $batas = 10;
+        $batas2 = 27;
+        $sekarang = date('d');
+        $batas = 5;
+        $batas2 = 27;
+        $sekarang = date('d');
+        if($sekarang < $batas)
+        {
+            $tglstart = date('Y-m-d', strtotime(date('Y-m-26')." -2 month"));
+            $tglend = date('Y-m-d', strtotime(date('Y-m-25')." -1 month"));
+            $periode = "Laporan Periode Bulan Lalu :";
+        }
+        elseif($sekarang >= $batas2)
+        {
+            $tglstart = date('Y-m-d', strtotime(date('Y-m-26')." -1 month"));
+            $tglend = date('Y-m-d', strtotime(date('Y-m-25')." today"));
+            $periode = "Laporan Periode Bulan ini :";
+        }
+        else
+        {
+            $tglstart = date('Y-m-d', strtotime(date('Y-m-26')." -1 month"));
+            $tglend = date('Y-m-d', strtotime(date('Y-m-d')." -2 day"));
+            $periode = "Laporan Periode Bulan ini :";
+        }
+        $data['daterange'] = date_range($tglstart, $tglend);
+
+        $dept = $this->db->get_where('karyawan',array('id_karyawan'=>$key))->row()->dept;
+        $id_dept = explode(',', $dept);
+        $this->db->where_in('id_dept', $id_dept);
+        $que = $this->db->get('dept');
+        $data['isinamadept'] = $que;
+        $this->load->view('tampil_kpim_new',$data);
+    }
+
+    function get_allkpim()
+    {
+        $data = $this->M_kpimmingguan->getAll()->result();
+        echo json_encode($data);
+    }
+
+
 
     function jadwal(){
         $this->app_model->getLogin();
@@ -643,6 +702,50 @@ class Kpimmingguan extends CI_Controller {
             }
             echo "</select>";
         }
+    }
+
+    function add_kpim()
+    {
+        $this->app_model->getLogin();
+        date_default_timezone_set('Asia/Jakarta');
+        $tgl = date("y-m-d");
+        $dead = date("y-m-d", strtotime($this->input->post('deadline')));
+        if ($dead < $tgl )
+        {
+            $status_dead = 3;
+        }
+        elseif ($dead > $tgl )
+        {
+            $status_dead = 1;   
+        }
+        elseif ($dead == $tgl )
+        {
+            $status_dead = 2;   
+        }
+
+        $gls = $this->input->post('goals');
+        $get_glsdet = $this->db->get_where('master_bobot',array('id_bobot'=>$gls))->row();
+
+        $ins = array(
+            'id_karyawan'=>$this->session->userdata('id_karyawan'),
+            'tgl'=>$tgl,
+            'nama_goals'=>$get_glsdet->nama,
+            'action'=>$this->input->post('action'),
+            'kendala'=>$this->input->post('kendala'),
+            'result'=>$this->input->post('result'),
+            'deadline'=>$this->input->post('deadline'),
+            'usulnilai'=>$this->input->post('usulnilai'),
+            'tgs_dept'=>$this->input->post('tgs_dept'),
+            'id_status'=>'1',
+            'status_deadline'=>$status_dead,
+            'note'=>'0',
+            'bobot'=>$get_glsdet->bobot,
+            'actual'=>$this->input->post('usulnilai'),
+            'score'=>$get_glsdet->bobot*$this->input->post('usulnilai')
+        );
+        $this->db->insert('kpim_karyawan',$ins);
+        $data['status'] = TRUE;
+        echo json_encode($data);
     }
 
 	public function create() {

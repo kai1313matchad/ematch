@@ -492,52 +492,7 @@ if ($this->session->userdata('harikerja') == 5 ) {
 
 <div class="container" style="width: 95%">
 
-	<div class="background">
-		<h1 style="padding-top: 20px"><center>KPIM Online (Mingguan)</center></h1><br><br>
-
-		<?php foreach ($harilibur as $hr) {?>
-			<?php date_default_timezone_set('Asia/Jakarta');?>
-			<?php if ($hr->tgl == date('Y-m-d')) {
-				echo '<div class="libur">Hari ini '. $hr->kategori . '<br>('. $hr->ket . ')</div> <br>';
-			} ?> 
-		<?php } ?>
-
-		<?php 
-		$statushari = "";
-	    $weekDay = date('w');
-
-		if ($this->session->userdata('harikerja') == '5') {
-
-			if ($weekDay == 0 || $weekDay == 6) {
-	    	$statushari = "libur";
-	    	// echo $statushari;
-	    	// echo "libur";
-	    	// redirect(base_url() . 'home', 'refresh');
-		    }
-		    else {
-		    	$statushari = "masuk";
-		    	// echo $statushari;
-		    	// echo "masuk";
-		    }
-		}
-
-		else {
-			if ($weekDay == 0 ) {
-	    	$statushari = "libur";
-	    	// echo $statushari;
-	    	// echo "libur";
-	    	// redirect(base_url() . 'home', 'refresh');
-		    }
-		    else {
-		    	$statushari = "masuk";
-		    	// echo $statushari;
-		    	// echo "masuk";
-		    }
-		}
-		
-	    
-
-		?>
+	 
 
 
 

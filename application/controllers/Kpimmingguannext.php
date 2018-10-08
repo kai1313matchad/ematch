@@ -174,8 +174,19 @@ class Kpimmingguannext extends CI_Controller {
     public function add_plannext()
     {
         $this->app_model->getLogin();
+        $gls = $this->input->post('goals');
+        $get_glsdet = $this->db->get_where('master_bobot',array('id_bobot'=>$gls))->row();
         $ins = array(
-
+            'id_karyawan'=>$this->session->userdata('id_karyawan'),
+            'id_bobot'=>$gls,
+            'tgl'=>$this->input->post('tgl'),
+            'nama_goals'=>$get_glsdet->nama,
+            'bobot'=>$get_glsdet->bobot,
+            'action'=>$this->input->post('action'),
+            'deadline'=>$this->input->post('deadline'),
+            'tgs_dept'=>$this->input->post('tgs_dept'),
+            'id_status'=>'1',
+            'id_approve'=>'1'
         );
 
         $libur = $this->M_pengumuman->ambil_libur()->result();
@@ -183,7 +194,7 @@ class Kpimmingguannext extends CI_Controller {
         {
             if ($hr->tgl == $this->input->post('tgl'))
             {
-                $data['lb_msg'] = 'hari_libur', 'Mohon maaf, Hari/Tanggal : ' . nama_hari($hr->tgl). ', ' . tgl_indo($hr->tgl). ' itu hari ' .  $hr->kategori . ' (' . $hr->ket. ')';
+                $data['lb_msg'] = '<div class="alert alert-danger alert-dismissable"><a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>Mohon maaf, Hari/Tanggal : ' . nama_hari($hr->tgl). ', ' . tgl_indo($hr->tgl). ' itu hari ' .  $hr->kategori . ' (' . $hr->ket. ')</div>';
                 $data['status'] = FALSE;
                 echo json_encode($data);
                 exit();
@@ -195,7 +206,7 @@ class Kpimmingguannext extends CI_Controller {
         {
             if ($tglinputnya == 0 || $tglinputnya == 6 )
             {
-                $data['lb_msg'] = 'hari_libur', 'Mohon maaf, hari ' . nama_hari($this->input->post('tgl')) . '  tanggal ' . date('d-m-Y', strtotime($this->input->post('tgl'))) . ' hari libur';
+                $data['lb_msg'] = '<div class="alert alert-danger alert-dismissable"><a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>Mohon maaf, hari ' . nama_hari($this->input->post('tgl')) . '  tanggal ' . date('d-m-Y', strtotime($this->input->post('tgl'))) . ' hari libur</div>';
                 $data['status'] = FALSE;
                 echo json_encode($data);
                 exit();
@@ -205,7 +216,7 @@ class Kpimmingguannext extends CI_Controller {
         {
             if ($tglinputnya == 0 )
             {
-                $data['lb_msg'] = 'hari_libur', 'Mohon maaf, hari ' . nama_hari($this->input->post('tgl')) . '  tanggal ' . date('d-m-Y', strtotime($this->input->post('tgl'))) . ' hari libur';
+                $data['lb_msg'] = '<div class="alert alert-danger alert-dismissable"><a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>Mohon maaf, hari ' . nama_hari($this->input->post('tgl')) . '  tanggal ' . date('d-m-Y', strtotime($this->input->post('tgl'))) . ' hari libur</div>';
                 $data['status'] = FALSE;
                 echo json_encode($data);
                 exit();
@@ -215,14 +226,20 @@ class Kpimmingguannext extends CI_Controller {
         $hariini = date('Y-m-d');
         if ($this->input->post('tgl') <= $hariini)
         {
-            $data['lb_msg'] = 'hari_libur', 'Mohon maaf, Anda tidak dapat menginputkan tanggal hari ini atau tanggal yang lalu';
+            $data['lb_msg'] = '<div class="alert alert-danger alert-dismissable"><a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>Mohon maaf, Anda tidak dapat menginputkan tanggal hari ini atau tanggal yang lalu</div>';
             $data['status'] = FALSE;
             echo json_encode($data);
             exit();
         }
 
-        $this->db->insert('',$ins);
+        $this->db->insert('kpim_next',$ins);
         $data['status'] = TRUE;
+        echo json_encode($data);
+    }
+
+    public function get_allplannext()
+    {
+        $data = $this->M_kpimmingguannext->getAll()->result();
         echo json_encode($data);
     }
 

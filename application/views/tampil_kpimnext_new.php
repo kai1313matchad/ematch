@@ -7,7 +7,7 @@
 	<link href="<?php echo base_url(); ?>assets/css/extra.css" rel="stylesheet">
 	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.2/css/bootstrap-select.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.2/css/bootstrap-select.css">
 	<link href="https://fonts.googleapis.com/css?family=Exo+2:400,400i" rel="stylesheet">
 </head>
 <style type="text/css">
@@ -263,12 +263,8 @@
 	<div class="container" style="width:95%">
 		<div class="background">
 			<h1 style="padding-top: 20px"><center>KPIM Online - Plan Next</center></h1><br><br>
-			<?php if ($this->session->flashdata('hari_libur')) { ?>
-			<div class="alert alert-danger alert-dismissable">
-		    	<a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
-		    	<?= $this->session->flashdata('hari_libur') ?>
-		  	</div>
-			<?php } ?>
+			<div class="row" id="alert_">
+			</div>
 			<div class="row">
 				<div class="col-lg-4 text-left" style="margin-left: 5px">
 					<h4><strong>
@@ -310,6 +306,7 @@
 						<div class="form-group">
 							<div id="jdl_konten" class="text-left" style="margin:0px 0 0 5px;">Goal/Pekerjaan :</div>
 					        <select id="konten" class="form-control" name="goals" data-live-search="true">
+					        	<option value="all">-- Pilih salah Satu --</option>
 							</select>
 						</div>
 					</div>
@@ -335,15 +332,16 @@
                     <table id="dataTablenext" class="table table-bordered table-hover table-striped" cellspacing="0" width="100%">
                         <thead class="text-center" style="background-color: #6db1ff">
                             <tr>
-                            	<th style="text-align: center;">No</th>
-								<th style="text-align: center;">Hari/Tanggal</th>
-								<th style="text-align: center;">Goal</th>
-								<th style="text-align: center;">Description</th>
-								<th style="text-align: center;">Deadline</th>
-								<th style="text-align: center;">Departement</th>
-								<th style="text-align: center;">Action</th
-                            </tr>                            
+                            	<!-- <th class="text-center">No</th> -->
+								<th class="text-center">Hari/Tanggal</th>
+								<th class="text-center">Goal</th>
+								<th class="text-center">Description</th>
+								<th class="text-center">Deadline</th>
+								<th class="text-center">Departement</th>
+								<th class="text-center">Action</th>
+                            </tr>
                         </thead>
+                        <tbody id="tbcontent"></tbody>
                     </table>
                 </div>
 			</div>
@@ -394,6 +392,7 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.2/js/bootstrap-select.js"></script>
 	<script>
 		$(document).ready(function(){
+			get_list();
 			$('#tgl_input').datetimepicker({
 				useCurrent: false,
 				format: 'YYYY-MM-DD',
@@ -416,18 +415,57 @@
                     get_dl($('#konten option:selected').val());
                 }
             });
+            $('#tgl_input').on('dp.change', function(e){ 
+            	get_dl($('#konten option:selected').val());
+            });
 		})
 
 		function add_plan()
 		{
 			$.ajax({
-	            url : "<?php echo site_url('karyawan/getdl_/')?>"+id,
+	            url : "<?php echo site_url('Kpimmingguannext/add_plannext')?>",
 	            type: "POST",
-	            data: $('form').serialize();
+	            data: $('form').serialize(),
 	            dataType: "JSON",
             	success: function(data)
                 {
-                	
+                	if(data.status)
+                	{
+                		get_list();
+                		$('#form_kpim')[0].reset();
+                	}
+                	else
+                	{
+                		var dv = $('<div class="col-sm-12">').append(data.lb_msg).appendTo('#alert_');
+                	}
+                },
+            	error: function (jqXHR, textStatus, errorThrown)
+                {
+                    alert('Error get data from ajax drop bank');
+                }
+            });
+		}
+
+		function get_list()
+		{
+			$('#tbcontent').empty();
+			$.ajax({
+	            url : "<?php echo site_url('Kpimmingguannext/get_allplannext')?>",
+	            type: "GET",
+	            dataType: "JSON",
+            	success: function(data)
+                {
+                	for (var i = 0; i < data.length; i++)
+                	{
+                		var $tr = $('<tr>').append(
+                			$('<td class="text-center">'+data[i]["tgl"]+'</td>'),
+                			$('<td class="text-center">'+data[i]["nama_goals"]+'</td>'),
+                			$('<td class="text-center">'+data[i]["action"]+'</td>'),
+                			$('<td class="text-center">'+data[i]["deadline"]+'</td>'),
+                			$('<td class="text-center">'+data[i]["nama_dept"]+'</td>'),
+                			$('<td class="text-center"><button type="button" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-edit"></span> <text style="text-transform: capitalize;"> Edit</text></button><button type="button" class="btn btn-default btn-sm" class="btn btn-default" style="text-transform: capitalize;"> <span class="glyphicon glyphicon-trash"></span> Hapus</button></td>')
+                		).appendTo('#tbcontent');
+                	}
                 },
             	error: function (jqXHR, textStatus, errorThrown)
                 {
@@ -448,12 +486,12 @@
                     var select = document.getElementById('konten');
                     var option;
                     option = document.createElement('option');
-                        option.value = ''
+                        option.value = '';
                         option.text = '--- Pilih salah satu ---';
                         select.add(option);
                     for (var i = 0; i < data.length; i++) {
                         option = document.createElement('option');
-                        option.value = data[i]["id_bobot"]
+                        option.value = data[i]["id_bobot"];
                         option.text = data[i]["nama"];
                         select.add(option);
                     }
