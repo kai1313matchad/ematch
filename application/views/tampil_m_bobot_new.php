@@ -144,7 +144,7 @@
 				<h4>Form Master Bobot Pekerjaan</h4>
 			</div>
 		</div>
-		<form id="form_bobot" action="<?php echo base_url();?>karyawan/simpanbobot" method="POST">
+		<form id="form_bobot">
 			<div class="row" style="padding-top: 15px;">
 				<div class="col-sm-3"> 
 					<text>Departement :</text>			
@@ -205,7 +205,7 @@
 					<text>Deadline :</text>
 				</div>
 				<div class="col-sm-9" id="fixdl">
-					<input type="number" name="fixdldate" class="form-control">
+					<input type="number" name="fixdldate" class="form-control" max="3" min="0">
 				</div>
 				<div class="col-sm-9" id="custdl">
 					<div class='input-group date' id='custdldate'>     
@@ -350,12 +350,18 @@
 			{
 				$('#fixdl').css({'display':'none'});
 				$('#custdl').css({'display':'block'});
+				$('[name="fixdldate"]').val('');
 			}
 			else
 			{
 				$('#custdl').css({'display':'none'});
 				$('#fixdl').css({'display':'block'});
+				$('[name="custdltgl"]').val('');
 			}
+		}
+		function pilihlevel()
+		{
+			($('#alllevel').prop('checked'))?$('.level').prop('checked', true):$('.level').prop('checked', false);
 		}
 		function simpan()
 		{
@@ -401,6 +407,7 @@
 				else
 				{
 					$('#custdldate').removeClass('has-error has-feedback');
+					$('#stat_dl').text($('[name="custdltgl"]').val());
 				}
 			}
 			else
@@ -411,9 +418,16 @@
 					$('#fixdldate').removeClass('has-error has-feedback');
 					return false;
 				}
+				else if($('[name="fixdldate"]').val() > 3)
+				{
+					alert('Nilai Terlalu Besar');
+					$('#fixdldate').addClass('has-error has-feedback');
+					return false;
+				}
 				else
 				{
 					$('#fixdldate').removeClass('has-error has-feedback');
+					$('#stat_dl').text($('[name="fixdldate"]').val());
 				}
 			}
 			$('#myModal').modal('show');
@@ -424,7 +438,7 @@
 		function submitbobot()
 		{
 			$.ajax({
-                url : "<?php echo site_url('Karyawan/simpanbobot')?>",
+                url : "<?php echo site_url('Karyawan/simpan_bobot')?>",
                 type: "POST",
                 data: $('form').serialize(),
                 dataType: "JSON",
@@ -432,7 +446,8 @@
                 {
                 	if(data.status)
                     {
-                    	var url = "<?php echo site_url('administrator/Finance/fin_invoice')?>";
+                    	alert('Data Bobot Sukses Disimpan');
+                    	var url = "<?php echo site_url('Karyawan/tesmasterbobot')?>"
                         window.location = url;
                     }
                 },

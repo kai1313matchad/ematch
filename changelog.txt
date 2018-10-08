@@ -1,3 +1,7 @@
+08102018
+- tambah kolom kpim_next
+	ALTER TABLE `kpim_next`
+	ADD COLUMN `id_bobot` INT(200) NOT NULL AFTER `id_karyawan`;
 05102018
 - tambah kolom tabel master bobot
 	ALTER TABLE `master_bobot`

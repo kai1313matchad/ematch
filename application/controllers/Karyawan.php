@@ -483,6 +483,18 @@ class Karyawan extends CI_Controller {
 
     }
 
+    public function getbobot_($id)
+    {
+        $data = ($id != 'all')?$this->db->get_where('master_bobot',array('id_dept'=>$id))->result():$this->db->get('master_bobot')->result();
+        echo json_encode($data);
+    }
+
+    public function getdl_($id)
+    {
+        $data = $this->db->get_where('master_bobot',array('id_bobot'=>$id))->row();
+        echo json_encode($data);
+    }
+
     public function ambildatabobot2(){
 
         $ini_dept = $this->input->post('pilihdept');
@@ -526,6 +538,26 @@ class Karyawan extends CI_Controller {
     {
         $this->app_model->getLogin();
         date_default_timezone_set('Asia/Jakarta');
+        $dept = $this->input->post('pilihdept');
+        $gls = $this->input->post('nama_pekerjaan');
+        $vlu = $this->input->post('nilai_bobot');
+        $lv = $this->input->post('level[]');
+        $sts = $this->input->post('stsbobot');
+        $fixdl = ($this->input->post('fixdldate') != '')?$this->input->post('fixdldate'):NULL;
+        $custdl = ($this->input->post('custdltgl') != '')?$this->input->post('custdltgl'):NULL;
+        $ins = array(
+            'id_dept'=>$dept,
+            'nama'=>$gls,
+            'bobot'=>$vlu,
+            'tgl_diinput'=>date('Y-m-d H:i:s'),
+            'id_levelakses'=>implode(",", $lv),
+            'sts_bobot'=>$sts,
+            'fix_dl'=>$fixdl,
+            'custom_dl'=>$custdl
+        );
+        $this->db->insert('master_bobot',$ins);
+        $data['status'] = TRUE;
+        echo json_encode($data);
     }
 
     public function hapusbobot($key){

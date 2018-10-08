@@ -66,7 +66,25 @@ class Kpimmingguannext extends CI_Controller {
     }
 
     
+    public function test_()
+    {
+        $this->app_model->getLogin();
+        $data['inboxblmbaca'] = $this->M_kpimmingguan->inboxblmbaca()->result();
+        $data['noteblmbaca'] = $this->M_kpimmingguan->noteblmbaca()->result();
+        $data['planblmbaca'] = $this->M_kpimmingguan->planblmbaca()->result();
+        $data['noteplan'] = $this->M_kpimmingguan->noteplan()->result();
+        $data['profilku'] = $this->M_kpimmingguan->getdataku()->result();
+        $key = $this->session->userdata('id_karyawan');
+        $data['jabatan'] = $this->M_kpimmingguannext->getJabatan($key);
+        $data['dept'] = $this->M_kpimmingguannext->getDept($key);
 
+        $dept = $this->db->get_where('karyawan',array('id_karyawan'=>$key))->row()->dept;
+        $id_dept = explode(',', $dept);
+        $this->db->where_in('id_dept', $id_dept);
+        $que = $this->db->get('dept');
+        $data['isinamadept'] = $que;
+        $this->load->view('tampil_kpimnext_new',$data);
+    }
 
     public function create() {
         $this->app_model->getLogin();
@@ -153,7 +171,60 @@ class Kpimmingguannext extends CI_Controller {
         redirect(base_url() . 'Kpimmingguannext', 'refresh');
     }
 
-    
+    public function add_plannext()
+    {
+        $this->app_model->getLogin();
+        $ins = array(
+
+        );
+
+        $libur = $this->M_pengumuman->ambil_libur()->result();
+        foreach ($libur as $hr)
+        {
+            if ($hr->tgl == $this->input->post('tgl'))
+            {
+                $data['lb_msg'] = 'hari_libur', 'Mohon maaf, Hari/Tanggal : ' . nama_hari($hr->tgl). ', ' . tgl_indo($hr->tgl). ' itu hari ' .  $hr->kategori . ' (' . $hr->ket. ')';
+                $data['status'] = FALSE;
+                echo json_encode($data);
+                exit();
+            }
+        }
+
+        $tglinputnya = date('w', strtotime($this->input->post('tgl')));
+        if ($this->session->userdata('harikerja') == 5)
+        {
+            if ($tglinputnya == 0 || $tglinputnya == 6 )
+            {
+                $data['lb_msg'] = 'hari_libur', 'Mohon maaf, hari ' . nama_hari($this->input->post('tgl')) . '  tanggal ' . date('d-m-Y', strtotime($this->input->post('tgl'))) . ' hari libur';
+                $data['status'] = FALSE;
+                echo json_encode($data);
+                exit();
+            }
+        }
+        if ($this->session->userdata('harikerja') == 6)
+        {
+            if ($tglinputnya == 0 )
+            {
+                $data['lb_msg'] = 'hari_libur', 'Mohon maaf, hari ' . nama_hari($this->input->post('tgl')) . '  tanggal ' . date('d-m-Y', strtotime($this->input->post('tgl'))) . ' hari libur';
+                $data['status'] = FALSE;
+                echo json_encode($data);
+                exit();
+            }
+        }
+
+        $hariini = date('Y-m-d');
+        if ($this->input->post('tgl') <= $hariini)
+        {
+            $data['lb_msg'] = 'hari_libur', 'Mohon maaf, Anda tidak dapat menginputkan tanggal hari ini atau tanggal yang lalu';
+            $data['status'] = FALSE;
+            echo json_encode($data);
+            exit();
+        }
+
+        $this->db->insert('',$ins);
+        $data['status'] = TRUE;
+        echo json_encode($data);
+    }
 
     public function update($key){
         $this->app_model->getLogin();
