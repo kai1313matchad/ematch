@@ -243,6 +243,12 @@ class Kpimmingguannext extends CI_Controller {
         echo json_encode($data);
     }
 
+    public function get_plannext($id)
+    {
+        $data = $this->db->join('dept b','b.id_dept = a.tgs_dept')->where('a.id',$id)->get('kpim_next a')->row();
+        echo json_encode($data);
+    }
+
     public function update($key){
         $this->app_model->getLogin();
 

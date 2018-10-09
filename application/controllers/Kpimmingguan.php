@@ -192,7 +192,13 @@ class Kpimmingguan extends CI_Controller {
 
     function get_allkpim()
     {
-        $data = $this->M_kpimmingguan->getAll()->result();
+        $data = $this->db->join('dept b','b.id_dept = a.tgs_dept')->where(array('id_status'=>'1','id_karyawan'=>$this->session->userdata('id_karyawan')))->order_by('tgl desc, id asc')->get('kpim_karyawan a')->result();
+        echo json_encode($data);
+    }
+
+    function get_kpim($id)
+    {
+        $data = $this->db->join('dept b','b.id_dept = a.tgs_dept')->where(array('id'=>$id))->get('kpim_karyawan a')->row();
         echo json_encode($data);
     }
 
@@ -744,6 +750,36 @@ class Kpimmingguan extends CI_Controller {
             'score'=>$get_glsdet->bobot*$this->input->post('usulnilai')
         );
         $this->db->insert('kpim_karyawan',$ins);
+        $data['status'] = TRUE;
+        echo json_encode($data);
+    }
+
+    function upd_kpim()
+    {
+        $this->app_model->getLogin();
+        $id = $this->input->post('id_kpim');
+        $get_ = $this->db->get_where('kpim_karyawan',array('id'=>$id))->row();
+        $upd = array(
+            'action'=>$this->input->post('desc_kpim'),
+            'kendala'=>$this->input->post('kendala_kpim'),
+            'result'=>$this->input->post('res_kpim'),
+            'usulnilai'=>$this->input->post('nilai_edit'),
+            'id_status'=>'1',
+            'note'=>'0',
+            'actual'=>$this->input->post('nilai_edit'),
+            'score'=>$get_->bobot*$this->input->post('nilai_edit')
+        );
+        $this->db->update('kpim_karyawan',$upd,array('id'=>$id));
+        $data['status'] = TRUE;
+        echo json_encode($data);
+    }
+
+    function del_kpim()
+    {
+        $this->app_model->getLogin();
+        $id = $this->input->post('id_kpim_hps');
+        $this->db->where('id',$id);
+        $this->db->delete('kpim_karyawan');
         $data['status'] = TRUE;
         echo json_encode($data);
     }

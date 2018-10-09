@@ -55,7 +55,6 @@
     	font-size: 30px;
     	background: rgba(198, 15, 15, 0.8);
     	color: white
-
     }
     button
     {
@@ -67,6 +66,25 @@
 	    -moz-appearance: none;
 	    text-indent: 1px;
 	    text-overflow: '';
+	}
+	.kpim-plan
+	{
+		background-color: #f79d00 !important;
+		color: black;
+	}
+	.kpim-today
+	{
+		background: linear-gradient(-20deg,#20b189,#456f9c);
+		background-image: linear-gradient(-20deg, rgb(32, 177, 137), rgb(69, 111, 156));
+		background-position-x: initial;
+		background-position-y: initial;
+		background-size: initial;
+		background-repeat-x: initial;
+		background-repeat-y: initial;
+		background-attachment: initial;
+		background-origin: initial;
+		background-clip: initial;
+		background-color: initial; color: white;
 	}
 </style>
 <body class="bg semua">
@@ -569,7 +587,7 @@
 		<br>
 		<div class="row">
 			<div class="col-sm-12 col-xs-12 table-responsive">
-				<table id="dataTables" class="table table-bordered table-hover table-striped" cellspacing="0" width="100%">
+				<table id="dataTables" class="table table-bordered table-hover" cellspacing="0" width="100%">
 					<thead class="text-center" style="background-color: #6db1ff">
 					  <tr>
 						<!-- <th class="text-center">No</th> -->
@@ -698,6 +716,7 @@
 			    </div>
 			</div>
 		</div>
+		<br><br>
 		<div class="row">
 			<div class="container">
 				<div class="dialogbox">
@@ -759,6 +778,171 @@
 					</div>
 				</div>
 			</div>
+		</div>
+	</div>
+	<!-- Modal -->
+	<div class="modal fade" id="modal_edit" role="dialog" style="padding-top: 100px;">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header" style="background-color: #6db1ff">
+		        	<button type="button" class="close" data-dismiss="modal">&times;</button>
+		          	<h4 class="modal-title text-center" id="myModalLabel"><b>Edit</b></h4>
+		        </div>
+		        <div class="modal-body">
+		        	<form id="form_edit" class="form-horizontal">
+		        		<div class="row">
+		        			<div class="col-sm-4">
+								<h4>Tanggal</h4>
+							</div>
+							<div class="col-sm-8">
+								<input type="text" name="tgl_kpim" class="form-control" readonly>
+							</div>
+		        		</div>
+		        		<div class="row">
+		        			<div class="col-sm-4">
+		        				<h4>Dept</h4>
+		        			</div>
+		        			<div class="col-sm-8">
+		        				<input type="text" name="dept_kpim" class="form-control" readonly>
+		        				<input type="hidden" name="id_kpim">
+		        			</div>
+		        		</div>
+		        		<div class="row">
+		        			<div class="col-sm-4">
+		        				<h4>Goals</h4>
+		        			</div>
+		        			<div class="col-sm-8">
+		        				<input type="text" name="goals_kpim" class="form-control" readonly>
+		        			</div>
+		        		</div>
+		        		<div class="row">
+		        			<div class="col-sm-4">
+		        				<h4>Description</h4>
+		        			</div>
+		        			<div class="col-sm-8">
+		        				<textarea class="form-control" rows="4" name="desc_kpim"></textarea>
+		        			</div>
+		        		</div>
+		        		<div class="row">
+		        			<div class="col-sm-4">
+		        				<h4>Kendala</h4>
+		        			</div>
+		        			<div class="col-sm-8">
+		        				<textarea class="form-control" rows="4" name="kendala_kpim"></textarea>
+		        			</div>
+		        		</div>
+		        		<div class="row">
+		        			<div class="col-sm-4">
+		        				<h4>Result</h4>
+		        			</div>
+		        			<div class="col-sm-8">
+		        				<textarea class="form-control" rows="4" name="res_kpim"></textarea>
+		        			</div>
+		        		</div>
+		        		<div class="row">
+		        			<div class="col-sm-4">
+		        				<h4>Nilai</h4>
+		        			</div>
+		        			<div class="col-sm-8">
+		        				<div id="over_" style="display: none">
+									<div class="col-md-12">
+										<label class="radio-inline">
+									      <input type="radio" name="nilai_edit" value="0" required>0
+									    </label>
+										<label class="radio-inline">
+									      <input type="radio" name="nilai_edit" value="1" >1
+									    </label>
+									    <label class="radio-inline">
+									      <input type="radio" name="nilai_edit" value="2">2
+									    </label>
+								    </div>
+									<div class="col-md-12">
+									    <label class="radio-inline">
+									      <input type="radio" name="nilai_edit" value="3">3
+									    </label>
+									    <label class="radio-inline">
+									      <input type="radio" name="nilai_edit" value="4">4
+									    </label>
+									    <label class="radio-inline">
+									      <input type="radio" name="nilai_edit" value="5">5
+									    </label>
+								    </div>
+								</div>
+								<div id="on_" style="display: none">
+									<label class="radio-inline">
+								      <input type="radio" name="nilai_edit" value="5" required>5
+								    </label>
+								    <label class="radio-inline">
+								      <input type="radio" name="nilai_edit" value="6">6
+								    </label>
+								    <label class="radio-inline">
+								      <input type="radio" name="nilai_edit" value="7">7
+								    </label>
+								    <label class="radio-inline">
+								      <input type="radio" name="nilai_edit" value="8">8
+								    </label>
+								</div>
+								<div id="in_" style="display: none">
+									<div class="col-md-12">
+										<label class="radio-inline">
+									      <input type="radio" name="nilai_edit" value="5" required>5
+									    </label>
+									    <label class="radio-inline">
+									      <input type="radio" name="nilai_edit" value="6">6
+									    </label>
+									    <label class="radio-inline">
+									      <input type="radio" name="nilai_edit" value="7">7
+									    </label>
+									</div>
+									<div class="col-md-12">
+									    <label class="radio-inline">
+									      <input type="radio" name="nilai_edit" value="8">8
+									    </label>
+									    <label class="radio-inline">
+									      <input type="radio" name="nilai_edit" value="9">9
+									    </label>
+									     <label class="radio-inline">
+									      <input type="radio" name="nilai_edit" value="10">10
+									    </label>
+									</div>
+								</div>
+		        			</div>
+		        		</div>
+		        		<div class="row">
+		        			<div class="col-sm-4">
+		        				<h4>Deadline</h4>
+		        			</div>
+		        			<div class="col-sm-8">
+		        				<input type="text" name="dl_kpim" class="form-control" readonly>
+		        			</div>
+		        		</div>
+		        	</form>
+		       	</div>
+		        <div class="modal-footer" style="background-color: #6db1ff">
+		        	<button type="button" style="font-family: 'Exo 2', sans-serif;" class="btn btn-default" data-dismiss="modal">Close</button>
+					<button type="button" style="font-family: 'Exo 2', sans-serif;" name="input"  class="btn btn-primary" onclick="upd_kpim()">Save changes</button>
+		        </div>
+		    </div>
+		</div>
+	</div>
+	<div class="modal fade" id="modal_hapus" role="dialog" style="padding-top: 100px;">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+		        	<button type="button" class="close" data-dismiss="modal">&times;</button>
+		          	<h4 class="modal-title text-center" id="myModalLabel"><b>Konfirmasi</b></h4>
+		        </div>
+		        <div class="modal-body" style="background-color: #2372ef; color: white;">
+					<h4 class="text-center">Yakin Hapus?</h4>
+		        	<form id="form_hapus" class="form-horizontal">
+		        		<input type="hidden" name="id_kpim_hps">
+		        	</form>
+		       	</div>
+		        <div class="modal-footer">
+		        	<button type="button" style="font-family: 'Exo 2', sans-serif;" class="btn btn-default" data-dismiss="modal">Batal</button>
+					<button type="button" style="font-family: 'Exo 2', sans-serif;" name="input"  class="btn btn-primary" onclick="del_kpim()">Hapus</button>
+		        </div>
+		    </div>
 		</div>
 	</div>
 	<!-- JS -->
@@ -827,9 +1011,9 @@
                 {
                 	if(data.status)
                 	{
-                		$("#dataTables").dataTable().fnDestroy()
+                		$("#dataTables").dataTable().fnDestroy();
                 		get_list();
-                		drop_goals();
+                		drop_goals(0);
                 		$('#form_kpim')[0].reset();
                 		$('#pilihdept').selectpicker('val','');
                 	}
@@ -845,10 +1029,76 @@
             });
 		}
 
+		function upd_kpim()
+		{
+			$.ajax({
+	            url : "<?php echo site_url('Kpimmingguan/upd_kpim')?>",
+	            type: "POST",
+	            data: $('#form_edit').serialize(),
+	            dataType: "JSON",
+            	success: function(data)
+                {
+                	if(data.status)
+                	{
+                		$("#dataTables").dataTable().fnDestroy()
+                		get_list();
+                		drop_goals(0);
+                		$('#form_edit')[0].reset();
+                		$('#pilihdept').selectpicker('val','');
+                		$('#modal_edit').modal('hide');
+                	}
+                	else
+                	{
+                		var dv = $('<div class="col-sm-12">').append(data.lb_msg).appendTo('#alert_');
+                	}
+                },
+            	error: function (jqXHR, textStatus, errorThrown)
+                {
+                    alert('Error get save data');
+                }
+            });
+		}
+
+		function del_kpim()
+		{
+			$.ajax({
+	            url : "<?php echo site_url('Kpimmingguan/del_kpim')?>",
+	            type: "POST",
+	            data: $('#form_hapus').serialize(),
+	            dataType: "JSON",
+            	success: function(data)
+                {
+                	if(data.status)
+                	{
+                		$("#dataTables").dataTable().fnDestroy()
+                		get_list();
+                		drop_goals(0);
+                		$('#form_edit')[0].reset();
+                		$('#pilihdept').selectpicker('val','');
+                		$('#modal_hapus').modal('hide');
+                	}
+                	else
+                	{
+                		var dv = $('<div class="col-sm-12">').append(data.lb_msg).appendTo('#alert_');
+                	}
+                },
+            	error: function (jqXHR, textStatus, errorThrown)
+                {
+                    alert('Error get save data');
+                }
+            });
+		}		
+
+		function dtables()
+      	{
+	        $('#dataTables').DataTable({
+	          order: [[0, 'desc']],
+	        });
+      	}
+
 		function get_list()
 		{
 			$('#tbcontent').empty();
-			// $("#dataTables").dataTable().fnDestroy()
 			$.ajax({
 	            url : "<?php echo site_url('Kpimmingguan/get_allkpim')?>",
 	            type: "GET",
@@ -857,19 +1107,31 @@
                 {
                 	for (var i = 0; i < data.length; i++)
                 	{
-                		var $tr = $('<tr>').append(
-                			$('<td class="text-center">'+data[i]["tgl"]+'</td>'),
+                		var tgl_now = moment().locale('id').format('YYYY-MM-DD');
+                		var warna = '';
+                		if(data[i]["tgl"] == tgl_now && data[i]["result"] == '')
+                		{
+                			warna = 'kpim-plan';
+                		}
+                		else if(data[i]["tgl"] == tgl_now && data[i]["result"] != '')
+                		{
+                			warna = 'kpim-today';
+                		}
+                		var tgl_in = Date.parse(data[i]["tgl"]);
+                		var tgl_dl = Date.parse(data[i]["deadline"]);
+                		var $tr = $('<tr class="'+warna+'">').append(
+                			$('<td class="text-center" data-order="'+tgl_in+'">'+data[i]["tgl"]+'</td>'),
                 			$('<td class="text-center">'+data[i]["nama_goals"]+'</td>'),
                 			$('<td class="text-center">'+data[i]["action"]+'</td>'),
                 			$('<td class="text-center">'+data[i]["kendala"]+'</td>'),
                 			$('<td class="text-center">'+data[i]["result"]+'</td>'),
-                			$('<td class="text-center">'+data[i]["deadline"]+'</td>'),
+                			$('<td class="text-center" data-order="'+tgl_dl+'">'+data[i]["deadline"]+'</td>'),
                 			$('<td class="text-center">'+data[i]["usulnilai"]+'</td>'),
                 			$('<td class="text-center">'+data[i]["nama_dept"]+'</td>'),
-                			$('<td class="text-center"><button type="button" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-edit"></span> <text style="text-transform: capitalize;"> Edit</text></button><button type="button" class="btn btn-default btn-sm" class="btn btn-default" style="text-transform: capitalize;"> <span class="glyphicon glyphicon-trash"></span> Hapus</button></td>')
+                			$('<td class="text-center"><button type="button" onclick="edit_('+data[i]["id"]+')" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-edit"></span> <text style="text-transform: capitalize;"> Edit</text></button><button type="button" onclick="hapus_('+data[i]["id"]+')" class="btn btn-default btn-sm" class="btn btn-default" style="text-transform: capitalize;"> <span class="glyphicon glyphicon-trash"></span> Hapus</button></td>')
                 		).appendTo('#tbcontent');
                 	}
-                	$('#dataTables').DataTable();
+                	dtables();
                 },
             	error: function (jqXHR, textStatus, errorThrown)
                 {
@@ -948,6 +1210,57 @@
                     alert('Error get data from ajax drop bank');
                 }
             });
+        }
+
+        function edit_(id)
+        {
+        	$.ajax({
+	            url : "<?php echo site_url('Kpimmingguan/get_kpim/')?>"+id,
+	            type: "GET",
+	            dataType: "JSON",
+            	success: function(data)
+                {
+                	$('[name="id_kpim"]').val(data.id);
+                	$('[name="tgl_kpim"]').val(data.tgl);
+                	$('[name="dept_kpim"]').val(data.nama_dept);
+                	$('[name="goals_kpim"]').val(data.nama_goals);
+                	$('[name="desc_kpim"]').val(data.action);
+                	$('[name="kendala_kpim"]').val(data.kendala);
+                	$('[name="res_kpim"]').val(data.result);
+                	$('[name="dl_kpim"]').val(data.deadline);
+                	if (data.deadline > data.tgl)
+					{
+						$("#in_").show(1000);
+						$("#over_").hide(1000);
+						$("#on_").hide(1000);
+					}
+					if (data.deadline == data.tgl)
+					{
+						$("#on_").show(1000);
+						$("#over_").hide(1000);
+						$("#in_").hide(1000);
+					}
+					if (data.deadline < data.tgl)
+					{
+						$("#over_").show(1000);
+						$("#in_").hide(1000);
+						$("#on_").hide(1000);
+					}
+					$("input[type='radio'][name='nilai_edit']" ).prop('checked', false);
+					$('[name="nilai_edit"][value="'+data.usulnilai+'"]').prop('checked', true);
+                	$('#modal_edit').modal('show');
+                },
+            	error: function (jqXHR, textStatus, errorThrown)
+                {
+                    alert('Error get data from ajax drop bank');
+                }
+            });
+        }
+
+        function hapus_(id)
+        {
+        	$('[name="id_kpim_hps"]').val(id);
+        	$('#modal_hapus').modal('show');
         }
 	</script>
 </body>
