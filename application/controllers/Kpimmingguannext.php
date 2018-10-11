@@ -249,6 +249,44 @@ class Kpimmingguannext extends CI_Controller {
         echo json_encode($data);
     }
 
+    public function sendplan_()
+    {
+        $this->app_model->getLogin();
+        $key = $this->session->userdata('id_karyawan');
+
+        $gt_today = strtotime('today');
+        $gt_mon = strtotime('next monday',$gt_today);
+        $gt_sat = strtotime('next saturday',$gt_mon);
+        $interval = new DateInterval('P1D');
+        $begin = new DateTime(date('Y-m-d',$gt_mon));
+        $end = new DateTime(date('Y-m-d',$gt_sat));
+        $gt_per = new DatePeriod($begin, $interval ,$end);
+        $gt_perarr = array();
+        foreach ($gt_per as $dt)
+        {
+            $gt_perarr[] = $dt->format('Y-m-d');
+        }
+        $getplan = $this->db->get_where('kpim_next','id_karyawan = "'.$key.'" AND id_status ="1" AND (tgl BETWEEN "'.date('Y-m-d',$gt_mon).'" AND "'.date('Y-m-d',$gt_sat).'")')->result();
+        $gt_perplan = array();
+        foreach ($getplan as $gp)
+        {
+            $gt_perplan[] = $gp->tgl;
+        }
+        $gethol = $this->db->get_where('hari_libur','tgl BETWEEN "'.date('Y-m-d',$gt_mon).'" AND "'.date('Y-m-d',$gt_sat).'"')->result();
+        $gt_hol = array();
+        foreach ($gethol as $gh)
+        {
+            $gt_hol[] = $gh->tgl;
+        }
+        // $gt_perarr = array_diff($gt_perarr,$gt_hol);
+        $data['today'] = date('Y-m-d',$gt_today);;
+        $data['monday'] = date('Y-m-d',$gt_mon);
+        $data['saturday'] = date('Y-m-d',$gt_sat);
+        $data['period'] = $gt_perarr;
+        $data['perplan'] = $gt_perplan;
+        echo json_encode($data);
+    }
+
     public function update($key){
         $this->app_model->getLogin();
 
@@ -378,4 +416,42 @@ class Kpimmingguannext extends CI_Controller {
         $this->M_kpimmingguannext->delete($key);
         redirect(base_url() . 'Kpimmingguannext', 'refresh');
     }
+
+    // $d = strtotime("today");
+    // $start_week = strtotime("last sunday midnight",$d);
+    // $end_week = strtotime("next thursday",$d);
+    // $start = date("Y-m-d",$start_week); 
+    // $end = date("Y-m-d",$end_week);
+    // $getsuns = strtotime("next monday",$d);
+    // $getsun = date("Y-m-d",strtotime("next monday",$d));
+    // $getnextsat = date("Y-m-d",strtotime("next saturday",$getsuns));
+
+    // echo date("Y-m-d",$d);
+    // echo "\n";
+    // echo $start;
+    // echo "\n";
+    // echo $end;
+    // echo "\n";
+    // echo $getsun;
+    // echo "\n";
+    // echo $getnextsat;
+    // echo "<br><br>";
+
+    // $begin = new DateTime($getsun);
+    // $end = new DateTime($getnextsat);
+    // $end = $end->modify( '+1 day' );
+
+    // $interval = new DateInterval('P1D');
+    // $daterange = new DatePeriod($begin, $interval ,$end);
+
+    // $datenw = array();
+    // foreach ($daterange as $dt)
+    // {
+    //     $datenw[] = $dt->format("Y-m-d");
+    // }
+    // $datenw = array_diff($datenw,["2018-10-17"]);
+    // foreach($datenw as $date)
+    // {
+    //     echo $date . "<br>";
+    // }
 }

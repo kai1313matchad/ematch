@@ -354,7 +354,7 @@
 					<div class="col-sm-3" style="float: right;">
 						<button class= "btn btn-primary" style="font-family: 'Exo 2', sans-serif; margin-top:5px;" onclick="ayo(); printContent('div1'); window.location.reload();return false;"><span class="glyphicon glyphicon-print"></span> Print</button>
 						<a class= "btn btn-primary" style="font-family: 'Exo 2', sans-serif; margin-top:5px;" href="<?php echo base_url();?>home"><span class="glyphicon glyphicon-home"></span><h7>  Home</h7></a>
-						<button type="button" class="btn btn-warning" style="font-family: 'Exo 2'; margin-top:5px"  data-toggle="modal" data-target="#myModalsend">Send</button>
+						<button type="button" class="btn btn-warning" style="font-family: 'Exo 2'; margin-top:5px"  onclick="opensendplan()">Send</button>
 					</div>
 				</div>
 			</div>
@@ -465,6 +465,38 @@
 		    </div>
 		</div>
 	</div>
+	<div class="modal fade" id="modal_send" role="dialog" style="padding-top: 100px;">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+		        	<button type="button" class="close" data-dismiss="modal">&times;</button>
+		          	<h4 class="modal-title text-center" id="myModalLabel"><b>Konfirmasi</b></h4>
+		        </div>
+		        <div class="modal-body" style="background-color: #2372ef; color: white;">
+		        	<form id="form_send" class="form-horizontal">
+		        		<h4 class="text-center">Anda akan mengirim Plan KPIM periode tanggal</h4>
+		        		<h3 class="text-center"><span name="awal"></span> s/d <span name="akhir"></span></h3>
+		        		<input type="hidden" name="awal_">
+		        		<input type="hidden" name="akhir_">
+		        		<div class="row">
+		        			<div class="col-xs-6">
+		        				<h4 class="text-center">Yang Harus Diinput</h4>
+		        				<p id="periode" class="text-center"></p>
+		        			</div>
+		        			<div class="col-xs-6">
+		        				<h4 class="text-center">Plan Anda</h4>
+		        				<p id="periodeplan" class="text-center"></p>
+		        			</div>
+		        		</div>
+		        	</form>
+		       	</div>
+		        <div class="modal-footer">
+		        	<button type="button" style="font-family: 'Exo 2', sans-serif;" class="btn btn-default" data-dismiss="modal">Batal</button>
+					<button type="button" style="font-family: 'Exo 2', sans-serif;" name="input"  class="btn btn-primary" onclick="sendplan_()">Kirim</button>
+		        </div>
+		    </div>
+		</div>
+	</div>
 	<!-- JS -->
 	<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -497,8 +529,8 @@
                     get_dl($('#konten option:selected').val());
                 }
             });
-            $('#tgl_input').on('dp.change', function(e){ 
-            	get_dl($('#konten option:selected').val());
+            $('#tgl_input').on('dp.change', function(e){
+            	get_dl(($('#konten option:selected').val()!='')?$('#konten option:selected').val():0);
             });
 		})
 
@@ -527,6 +559,35 @@
             	error: function (jqXHR, textStatus, errorThrown)
                 {
                     alert('Error get data from ajax drop bank');
+                }
+            });
+		}
+
+		function opensendplan()
+		{
+			$.ajax({
+	            url : "<?php echo site_url('Kpimmingguannext/sendplan_')?>",
+	            type: "GET",
+	            dataType: "JSON",
+            	success: function(data)
+                {
+                	$('[name="awal"]').text(moment(data.monday).locale('id').format('DD-MM-YYYY'));
+                	$('[name="akhir"]').text(moment(data.saturday).locale('id').format('DD-MM-YYYY'));
+                	$('[name="awal_"]').text(data.monday);
+                	$('[name="akhir_"]').text(data.saturday);
+                	for (var i = 0; i < data['period'].length; i++)
+                	{
+                		var v = $('<h4>').append(data['period'][i]).appendTo('#periode');
+                	}
+                	for (var i = 0; i < data['perplan'].length; i++)
+                	{
+                		var v = $('<h4>').append(data['perplan'][i]).appendTo('#periodeplan');
+                	}
+                	$('#modal_send').modal('show');
+                },
+            	error: function (jqXHR, textStatus, errorThrown)
+                {
+                    alert('Send Plan Error');
                 }
             });
 		}
@@ -616,7 +677,7 @@
                 },
             	error: function (jqXHR, textStatus, errorThrown)
                 {
-                    alert('Error get data from ajax drop bank');
+                    alert('Pilih Goals');
                 }
             });
         }
