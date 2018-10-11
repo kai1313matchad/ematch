@@ -304,11 +304,20 @@
 								<?php endforeach ?>
 							</select>
 						</div>
-						<div class="form-group">
+						<!-- <div class="form-group">
 							<div id="jdl_konten" class="text-left" style="margin:0px 0 0 5px;">Goal/Pekerjaan :</div>
 					        <select id="konten" class="form-control" name="goals" data-live-search="true">
 					        	<option value="all">-- Pilih salah Satu --</option>
 							</select>
+						</div> -->
+						<div class="form-group">
+							<div class="input-group">
+					            <input type="text" name="goalsNm" class="form-control">
+					            <input type="hidden" name="goalsId">
+					            <span class="input-group-btn">
+					                <button id="open" type="button" class="btn btn-primary" onclick="openGoals()" style="text-transform: capitalize; ">Open</button>
+					            </span>
+					        </div>
 						</div>
 					</div>
 					<div class="col-sm-5 col-xs-5">
@@ -320,7 +329,7 @@
 								<span class="input-group-addon">
 								<span class="glyphicon glyphicon-calendar"></span>
 								</span>
-								<input type='text' class="form-control input-group-addon" placeholder="Deadline" name="deadline" id="deadline" readonly required>
+								<input type='text' class="form-control input-group-addon" placeholder="Deadline" name="deadline" id="deadline" required>
 							</div>
 							<br>
 							<button type="button" onclick="add_plan()" style="font-family: 'Exo 2', sans-serif; " name="input" class="btn btn-primary"><span class="glyphicon glyphicon-floppy-save"></span> Tambah Data</button>
@@ -386,6 +395,35 @@
 		</div>
 	</div>
 	<!-- Modal -->
+	<div class="modal fade" id="modal_goals" role="dialog" style="padding-top: 100px;">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header" style="background-color: #6db1ff">
+		        	<button type="button" class="close" data-dismiss="modal">&times;</button>
+		          	<h4 class="modal-title text-center" id="myModalLabel"><b>Edit</b></h4>
+		        </div>
+		        <div class="modal-body">
+		        	<div class="row">
+		        		<div class="col-sm-12 col-xs-12 table-responsive">
+		        			<table id="dtbGoals" class="table table-bordered table-hover table-striped" cellspacing="0" width="100%">
+		        				<thead style="background-color: #6db1ff">
+		        					<tr>
+		        						<td class="text-center">Dept.</td>
+		        						<td class="text-center">Goal/Pekerjaan</td>
+		        						<td class="text-center">Action</td>
+		        					</tr>
+		        				</thead>
+		        				<tbody id="tbgoalcontent"></tbody>
+		        			</table>
+		        		</div>
+		        	</div>
+		       	</div>
+		        <div class="modal-footer" style="background-color: #6db1ff">
+		        	<button type="button" style="font-family: 'Exo 2', sans-serif;" class="btn btn-default" data-dismiss="modal">Close</button>
+		        </div>
+		    </div>
+		</div>
+	</div>
 	<div class="modal fade" id="modal_edit" role="dialog" style="padding-top: 100px;">
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
@@ -473,11 +511,16 @@
 		          	<h4 class="modal-title text-center" id="myModalLabel"><b>Konfirmasi</b></h4>
 		        </div>
 		        <div class="modal-body" style="background-color: #2372ef; color: white;">
+		        	<div class="row" id="alertSend_">
+
+					</div>
 		        	<form id="form_send" class="form-horizontal">
 		        		<h4 class="text-center">Anda akan mengirim Plan KPIM periode tanggal</h4>
 		        		<h3 class="text-center"><span name="awal"></span> s/d <span name="akhir"></span></h3>
 		        		<input type="hidden" name="awal_">
 		        		<input type="hidden" name="akhir_">
+		        		<input type="hidden" name="countMust_">
+		        		<input type="hidden" name="countPlan_">
 		        		<div class="row">
 		        			<div class="col-xs-6">
 		        				<h4 class="text-center">Yang Harus Diinput</h4>
@@ -520,7 +563,8 @@
 			$('#pilihdept').change(function(){
                 if($('#pilihdept option:selected').val() != '')
                 {
-                    drop_goals($('#pilihdept option:selected').val());
+                    // drop_goals($('#pilihdept option:selected').val());
+                    modal_goals($('#pilihdept option:selected').val());
                 }
             });
             $('#konten').change(function(){
@@ -529,9 +573,9 @@
                     get_dl($('#konten option:selected').val());
                 }
             });
-            $('#tgl_input').on('dp.change', function(e){
-            	get_dl(($('#konten option:selected').val()!='')?$('#konten option:selected').val():0);
-            });
+            // $('#tgl_input').on('dp.change', function(e){
+            // 	get_dl(($('#konten option:selected').val()!='')?$('#konten option:selected').val():0);
+            // });
 		})
 
 		function add_plan()
@@ -547,9 +591,9 @@
                 	{
                 		$("#dataTablenext").dataTable().fnDestroy();
                 		get_list();
-                		drop_goals(0);
+                		// drop_goals(0);
                 		$('#form_kpim')[0].reset();
-                		$('#pilihdept').selectpicker('val','');
+                		$('#pilihdept').selectpicker('refresh');
                 	}
                 	else
                 	{
@@ -565,8 +609,9 @@
 
 		function opensendplan()
 		{
+			$('#alertSend_').empty();
 			$.ajax({
-	            url : "<?php echo site_url('Kpimmingguannext/sendplan_')?>",
+	            url : "<?php echo site_url('Kpimmingguannext/getplantosend_')?>",
 	            type: "GET",
 	            dataType: "JSON",
             	success: function(data)
@@ -575,6 +620,10 @@
                 	$('[name="akhir"]').text(moment(data.saturday).locale('id').format('DD-MM-YYYY'));
                 	$('[name="awal_"]').text(data.monday);
                 	$('[name="akhir_"]').text(data.saturday);
+                	$('[name="countMust_"]').val(data['period'].length);
+                	$('[name="countPlan_"]').val(data['perplan'].length);
+                	$('#periode').empty();
+                	$('#periodeplan').empty();
                 	for (var i = 0; i < data['period'].length; i++)
                 	{
                 		var v = $('<h4>').append(data['period'][i]).appendTo('#periode');
@@ -590,6 +639,39 @@
                     alert('Send Plan Error');
                 }
             });
+		}
+
+		function sendplan_()
+		{
+			var countMust = $('[name="countMust_"]').val();
+			var countPlan = $('[name="countPlan_"]').val();
+			if(countPlan < countMust)
+			{
+				var dv = $('<div class="col-sm-12">').append('<div class="alert alert-danger alert-dismissable"><a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>Jumlah Plan Anda Kurang Dari Jumlah Hari Kerja Anda Untuk Minggu Depan</div>').appendTo('#alertSend_');
+			}
+			else
+			{
+				$.ajax({
+		            url : "<?php echo site_url('Kpimmingguannext/sendPlan')?>",
+		            type: "GET",
+		            dataType: "JSON",
+	            	success: function(data)
+	                {
+	                	if(data.status)
+	                	{
+	                		window.location.reload(true);
+	                	}
+	                	else
+	                	{
+	                		var dv = $('<div class="col-sm-12">').append('<div class="alert alert-danger alert-dismissable"><a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>Jumlah Plan Anda Kurang Dari Jumlah Hari Kerja Anda Untuk Minggu Depan</div>').appendTo('#alertSend_');
+	                	}
+	                },
+	            	error: function (jqXHR, textStatus, errorThrown)
+	                {
+	                    alert('Send Plan Error');
+	                }
+	            });
+			}
 		}
 
 		function get_list()
@@ -628,6 +710,94 @@
 	        $('#dataTablenext').DataTable({
 	          order: [[0, 'desc']],
 	        });
+      	}
+
+      	function dtb_goals()
+      	{
+	        $('#dtbGoals').DataTable({});
+      	}
+
+      	function modal_goals(id)
+      	{
+      		$.ajax({
+	            url : "<?php echo site_url('karyawan/getbobot2_/')?>"+id,
+	            type: "GET",
+	            dataType: "JSON",
+            	success: function(data)
+                {
+                    $('#tbgoalcontent').empty();
+                    $("#dtbGoals").dataTable().fnDestroy();
+                    for (var i = 0; i < data.length; i++)
+                    {
+                    	var $tr = $('<tr>').append(
+                    		$('<td class="text-center">'+data[i]["nama_dept"]+'</td>'),
+                    		$('<td class="text-center">'+data[i]["nama"]+'</td>'),
+                    		$('<td class="text-center"><button type="button" onclick="pickGoals('+data[i]["id_bobot"]+')" class="btn btn-primary btn-sm" class="btn btn-default" style="text-transform: capitalize;"> Pilih</button></td>')
+                    		).appendTo('#tbgoalcontent');
+                    }
+                    dtb_goals();
+                    $('#modal_goals').modal('show');
+                },
+            	error: function (jqXHR, textStatus, errorThrown)
+                {
+                    alert('Error get data for goals list');
+                }
+            });
+      	}
+
+      	function openGoals()
+      	{
+      		var id = $('#pilihdept option:selected').val();
+      		if(id!='all')
+      		{
+      			$.ajax({
+		            url : "<?php echo site_url('karyawan/getbobot2_/')?>"+id,
+		            type: "GET",
+		            dataType: "JSON",
+	            	success: function(data)
+	                {
+	                    $('#tbgoalcontent').empty();
+	                    $("#dtbGoals").dataTable().fnDestroy();
+	                    for (var i = 0; i < data.length; i++)
+	                    {
+	                    	var $tr = $('<tr>').append(
+	                    		$('<td class="text-center">'+data[i]["nama_dept"]+'</td>'),
+	                    		$('<td class="text-center">'+data[i]["nama"]+'</td>'),
+	                    		$('<td class="text-center"><button type="button" onclick="pickGoals('+data[i]["id_bobot"]+')" class="btn btn-primary btn-sm" class="btn btn-default" style="text-transform: capitalize;"> Pilih</button></td>')
+	                    		).appendTo('#tbgoalcontent');
+	                    }
+	                    dtb_goals();
+	                    $('#modal_goals').modal('show');
+	                },
+	            	error: function (jqXHR, textStatus, errorThrown)
+	                {
+	                    alert('Error get data for goals list');
+	                }
+	            });
+      		}
+      		else
+      		{
+      			alert('Pilih Dept. Terlebih Dahulu');
+      		}
+      	}
+
+      	function pickGoals(id)
+      	{
+      		$.ajax({
+	            url : "<?php echo site_url('karyawan/getdl_/')?>"+id,
+	            type: "GET",
+	            dataType: "JSON",
+            	success: function(data)
+                {
+                	$('[name="goalsNm"]').val(data.nama);
+                	$('[name="goalsId"]').val(data.id_bobot);
+                	$('#modal_goals').modal('hide');
+                },
+            	error: function (jqXHR, textStatus, errorThrown)
+                {
+                    alert('Pilih Goals');
+                }
+            });
       	}
 
 		function drop_goals(id)

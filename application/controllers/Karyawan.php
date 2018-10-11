@@ -489,6 +489,12 @@ class Karyawan extends CI_Controller {
         echo json_encode($data);
     }
 
+    public function getbobot2_($id)
+    {
+        $data = $this->db->join('dept b','b.id_dept = a.id_dept')->get_where('master_bobot a',array('a.id_dept'=>$id))->result();
+        echo json_encode($data);
+    }
+
     public function getdl_($id)
     {
         $data = $this->db->get_where('master_bobot',array('id_bobot'=>$id))->row();
