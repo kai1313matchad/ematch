@@ -12,61 +12,61 @@ class Kpimmingguannext extends CI_Controller {
         $this->load->helper(array('url', 'form', 'text', 'html', 'security', 'file', 'directory', 'number', 'date', 'download', 'tgl_indo'));
     }
 
-    public function index()
-    {
-        $this->app_model->getLogin();
+    // public function index()
+    // {
+    //     $this->app_model->getLogin();
         
-        $keyjabatan = $this->session->userdata('id_karyawan');
-        $data['jabatan'] = $this->M_kpimmingguannext->getJabatan($keyjabatan);
+    //     $keyjabatan = $this->session->userdata('id_karyawan');
+    //     $data['jabatan'] = $this->M_kpimmingguannext->getJabatan($keyjabatan);
 
-        $keydept = $this->session->userdata('id_karyawan');
-        $data['profilku'] = $this->M_kpimmingguan->getdataku()->result();
-        $data['dept'] = $this->M_kpimmingguannext->getDept($keydept);
-        //print_r($username);
-        //die();
+    //     $keydept = $this->session->userdata('id_karyawan');
+    //     $data['profilku'] = $this->M_kpimmingguan->getdataku()->result();
+    //     $data['dept'] = $this->M_kpimmingguannext->getDept($keydept);
+    //     //print_r($username);
+    //     //die();
 
-        $data['table'] = $this->M_kpimmingguannext->getAll()->result();
-         $data['inboxblmbaca'] = $this->M_kpimmingguan->inboxblmbaca()->result();
-        $data['noteblmbaca'] = $this->M_kpimmingguan->noteblmbaca()->result();
-        $data['planblmbaca'] = $this->M_kpimmingguan->planblmbaca()->result();
-        $data['noteplan'] = $this->M_kpimmingguan->noteplan()->result();
-        $data['harilibur'] = $this->M_pengumuman->ambil_libur()->result();
+    //     $data['table'] = $this->M_kpimmingguannext->getAll()->result();
+    //      $data['inboxblmbaca'] = $this->M_kpimmingguan->inboxblmbaca()->result();
+    //     $data['noteblmbaca'] = $this->M_kpimmingguan->noteblmbaca()->result();
+    //     $data['planblmbaca'] = $this->M_kpimmingguan->planblmbaca()->result();
+    //     $data['noteplan'] = $this->M_kpimmingguan->noteplan()->result();
+    //     $data['harilibur'] = $this->M_pengumuman->ambil_libur()->result();
 
 
-        $this->db->where('id_karyawan', $keydept);
-        $query = $this->db->get('karyawan');
-        if($query->num_rows()>0)
-        {
-            foreach ($query->result() as $row) {
-            $dept = $row->dept;
-            }
-        }
+    //     $this->db->where('id_karyawan', $keydept);
+    //     $query = $this->db->get('karyawan');
+    //     if($query->num_rows()>0)
+    //     {
+    //         foreach ($query->result() as $row) {
+    //         $dept = $row->dept;
+    //         }
+    //     }
 
-        $id_dept = explode(',', $dept);
-        $this->db->where_in('id_dept', $id_dept);
-        $query2 = $this->db->get('dept');
+    //     $id_dept = explode(',', $dept);
+    //     $this->db->where_in('id_dept', $id_dept);
+    //     $query2 = $this->db->get('dept');
 
-        if($query2->num_rows()>0)
-        {
-            /*echo "<select>";;
-            foreach ($query2->result() as $rows) 
-            {
-            echo "<option value'".$rows->$id_dept."'>".$rows->nama_dept."</option>";
+    //     if($query2->num_rows()>0)
+    //     {
+    //         /*echo "<select>";;
+    //         foreach ($query2->result() as $rows) 
+    //         {
+    //         echo "<option value'".$rows->$id_dept."'>".$rows->nama_dept."</option>";
 
-            }
-            echo "</select>";*/
+    //         }
+    //         echo "</select>";*/
 
-            $data['isinamadept'] = $query2;
+    //         $data['isinamadept'] = $query2;
             
 
-        }
-        // $data['selectbobot'] = $this->M_karyawanku->getbobot($id_dept)->result();
-        //selesai tampilkan dept
-        $this->load->view('tampil_kpimnext',$data);
-    }
+    //     }
+    //     // $data['selectbobot'] = $this->M_karyawanku->getbobot($id_dept)->result();
+    //     //selesai tampilkan dept
+    //     $this->load->view('tampil_kpimnext',$data);
+    // }
 
     
-    public function test_()
+    public function index()
     {
         $this->app_model->getLogin();
         $data['inboxblmbaca'] = $this->M_kpimmingguan->inboxblmbaca()->result();
@@ -234,6 +234,39 @@ class Kpimmingguannext extends CI_Controller {
         }
 
         $this->db->insert('kpim_next',$ins);
+        $data['status'] = TRUE;
+        echo json_encode($data);
+    }
+
+    function upd_plannext()
+    {
+        $this->app_model->getLogin();
+        $id = $this->input->post('id_plan');
+        $gls = $this->input->post('goals_plan');
+        $get_glsdet = $this->db->get_where('master_bobot',array('id_bobot'=>$gls))->row();
+        $upd = array(
+            'id_karyawan'=>$this->session->userdata('id_karyawan'),
+            'id_bobot'=>$gls,
+            'tgl'=>$this->input->post('tgl_plan'),
+            'nama_goals'=>$get_glsdet->nama,
+            'bobot'=>$get_glsdet->bobot,
+            'action'=>$this->input->post('desc_plan'),
+            'deadline'=>$this->input->post('dl_plan'),
+            'tgs_dept'=>$this->input->post('tgs_dept_plan'),
+            'id_status'=>'1',
+            'id_approve'=>'1'
+        );
+        $this->db->update('kpim_next',$upd,array('id'=>$id));
+        $data['status'] = TRUE;
+        echo json_encode($data);
+    }
+
+    function del_plannext()
+    {
+        $this->app_model->getLogin();
+        $id = $this->input->post('id_plan_hps');
+        $this->db->where('id',$id);
+        $this->db->delete('kpim_next');
         $data['status'] = TRUE;
         echo json_encode($data);
     }

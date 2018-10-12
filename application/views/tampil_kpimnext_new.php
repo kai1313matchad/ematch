@@ -438,7 +438,13 @@
 								<h4>Tanggal</h4>
 							</div>
 							<div class="col-sm-8">
-								<input type="text" name="tgl_plan" class="form-control" readonly>
+								<!-- <input type="text" name="tgl_plan" class="form-control" readonly> -->
+								<div class='input-group date tgls' id='tgl_edit'>
+									<span class="input-group-addon">
+										<span class="glyphicon glyphicon-calendar"></span>
+									</span>
+									<input type='text' class="form-control input-group-addon" name="tgl_plan" placeholder="Tanggal" required/>
+								</div>
 							</div>
 		        		</div>
 		        		<div class="row">
@@ -446,8 +452,14 @@
 		        				<h4>Dept</h4>
 		        			</div>
 		        			<div class="col-sm-8">
-		        				<input type="text" name="dept_plan" class="form-control" readonly>
+		        				<!-- <input type="text" name="dept_plan" class="form-control" readonly> -->
 		        				<input type="hidden" name="id_plan">
+		        				<select name="tgs_dept_plan"  id="pilihdept_plan" class="form-control" data-live-search="true">
+									<option value="all">-- Pilih Dept --</option>
+									<?php foreach ($isinamadept->result() as $key): ?>
+									<option value="<?php echo $key->id_dept;?>"> <?php echo $key->nama_dept;?></option>
+									<?php endforeach ?>
+								</select>
 		        			</div>
 		        		</div>
 		        		<div class="row">
@@ -455,7 +467,9 @@
 		        				<h4>Goals</h4>
 		        			</div>
 		        			<div class="col-sm-8">
-		        				<input type="text" name="goals_plan" class="form-control" readonly>
+		        				<!-- <input type="text" name="goals_plan" class="form-control" readonly> -->
+		        				<select name="goals_plan" id="pilihgoals_plan" class="form-control" data-live-search="true">
+		        				</select>
 		        			</div>
 		        		</div>
 		        		<div class="row">
@@ -471,14 +485,20 @@
 		        				<h4>Deadline</h4>
 		        			</div>
 		        			<div class="col-sm-8">
-		        				<input type="text" name="dl_plan" class="form-control" readonly>
+		        				<!-- <input type="text" name="dl_plan" class="form-control" readonly> -->
+		        				<div class='input-group date tgls' id='dl_edit'>
+		        					<span class="input-group-addon">
+										<span class="glyphicon glyphicon-calendar"></span>
+									</span>
+									<input type='text' class="form-control input-group-addon" name="dl_plan" placeholder="Tanggal" required/>
+								</div>
 		        			</div>
 		        		</div>
 		        	</form>
 		       	</div>
 		        <div class="modal-footer" style="background-color: #6db1ff">
 		        	<button type="button" style="font-family: 'Exo 2', sans-serif;" class="btn btn-default" data-dismiss="modal">Close</button>
-					<button type="button" style="font-family: 'Exo 2', sans-serif;" name="input"  class="btn btn-primary" onclick="upd_kpim()">Save changes</button>
+					<button type="button" style="font-family: 'Exo 2', sans-serif;" name="input"  class="btn btn-primary" onclick="upd_plan()">Save changes</button>
 		        </div>
 		    </div>
 		</div>
@@ -498,7 +518,7 @@
 		       	</div>
 		        <div class="modal-footer">
 		        	<button type="button" style="font-family: 'Exo 2', sans-serif;" class="btn btn-default" data-dismiss="modal">Batal</button>
-					<button type="button" style="font-family: 'Exo 2', sans-serif;" name="input"  class="btn btn-primary" onclick="del_kpim()">Hapus</button>
+					<button type="button" style="font-family: 'Exo 2', sans-serif;" name="input"  class="btn btn-primary" onclick="del_plan()">Hapus</button>
 		        </div>
 		    </div>
 		</div>
@@ -559,6 +579,13 @@
 			$('#tgl_dl').datetimepicker({
 				format: 'YYYY-MM-DD'
 			});
+			$('#tgl_edit').datetimepicker({
+				format: 'YYYY-MM-DD'
+			});
+			$('#dl_edit').datetimepicker({
+				format: 'YYYY-MM-DD'
+			});
+			$('#pilihdept_plan').selectpicker({});
 			$('#pilihdept').selectpicker({});
 			$('#pilihdept').change(function(){
                 if($('#pilihdept option:selected').val() != '')
@@ -567,12 +594,18 @@
                     modal_goals($('#pilihdept option:selected').val());
                 }
             });
-            $('#konten').change(function(){
-                if($('#konten option:selected').val() != '')
+            $('#pilihdept_plan').change(function(){
+                if($('#pilihdept_plan option:selected').val() != '')
                 {
-                    get_dl($('#konten option:selected').val());
+                    drop_goals($('#pilihdept_plan option:selected').val());
                 }
             });
+            // $('#konten').change(function(){
+            //     if($('#konten option:selected').val() != '')
+            //     {
+            //         get_dl($('#konten option:selected').val());
+            //     }
+            // });
             // $('#tgl_input').on('dp.change', function(e){
             // 	get_dl(($('#konten option:selected').val()!='')?$('#konten option:selected').val():0);
             // });
@@ -603,6 +636,73 @@
             	error: function (jqXHR, textStatus, errorThrown)
                 {
                     alert('Error get data from ajax drop bank');
+                }
+            });
+		}
+
+		function upd_plan()
+		{
+			if ($('[name="tgl_plan"]').val() == '' || $('[name="tgs_dept_plan"]').val() == '' || $('[name="goals_plan"]').val() == '' || $('[name="desc_plan"]').val() == '' || $('[name="dl_plan"]').val() == '')
+			{
+				alert('Data Tidak Lengkap');
+			}
+			else
+			{
+				$.ajax({
+		            url : "<?php echo site_url('Kpimmingguannext/upd_plannext')?>",
+		            type: "POST",
+		            data: $('#form_edit').serialize(),
+		            dataType: "JSON",
+	            	success: function(data)
+	                {
+	                	if(data.status)
+	                	{
+	                		$("#dataTablenext").dataTable().fnDestroy();
+	                		get_list();
+	                		// drop_goals(0);
+	                		$('#form_kpim')[0].reset();
+	                		$('#pilihdept').selectpicker('refresh');
+	                		$('#modal_edit').modal('hide');
+	                	}
+	                	else
+	                	{
+	                		var dv = $('<div class="col-sm-12">').append(data.lb_msg).appendTo('#alert_');
+	                	}
+	                },
+	            	error: function (jqXHR, textStatus, errorThrown)
+	                {
+	                    alert('Error get save data');
+	                }
+	            });
+			}
+		}
+
+		function del_plan()
+		{
+			$.ajax({
+	            url : "<?php echo site_url('Kpimmingguannext/del_plannext')?>",
+	            type: "POST",
+	            data: $('#form_hapus').serialize(),
+	            dataType: "JSON",
+            	success: function(data)
+                {
+                	if(data.status)
+                	{
+                		$("#dataTablenext").dataTable().fnDestroy();
+                		get_list();
+                		// drop_goals(0);
+                		$('#form_kpim')[0].reset();
+                		$('#pilihdept').selectpicker('refresh');
+                		$('#modal_hapus').modal('hide');
+                	}
+                	else
+                	{
+                		var dv = $('<div class="col-sm-12">').append(data.lb_msg).appendTo('#alert_');
+                	}
+                },
+            	error: function (jqXHR, textStatus, errorThrown)
+                {
+                    alert('Error get save data');
                 }
             });
 		}
@@ -808,8 +908,8 @@
 	            dataType: "JSON",
             	success: function(data)
                 {
-                    $('#konten').empty();
-                    var select = document.getElementById('konten');
+                    $('#pilihgoals_plan').empty();
+                    var select = document.getElementById('pilihgoals_plan');
                     var option;
                     option = document.createElement('option');
                         option.value = '';
@@ -821,10 +921,10 @@
                         option.text = data[i]["nama"];
                         select.add(option);
                     }
-                    $('#konten').selectpicker({
+                    $('#pilihgoals_plan').selectpicker({
                         dropupAuto: false
                     });
-                    $('#konten').selectpicker('refresh');
+                    $('#pilihgoals_plan').selectpicker('refresh');
                 },
             	error: function (jqXHR, textStatus, errorThrown)
                 {
@@ -860,6 +960,9 @@
 	            dataType: "JSON",
             	success: function(data)
                 {
+                	$('select#pilihdept_plan').val(data.tgs_dept);
+                	$('#pilihdept_plan').selectpicker('refresh');
+                	drop_goals(data.tgs_dept);
                 	$('[name="id_plan"]').val(data.id);
                 	$('[name="tgl_plan"]').val(data.tgl);
                 	$('[name="dept_plan"]').val(data.nama_dept);
@@ -867,12 +970,17 @@
                 	$('[name="desc_plan"]').val(data.action);
                 	$('[name="dl_plan"]').val(data.deadline);
                 	$('#modal_edit').modal('show');
+                	$('select#pilihgoals_plan').val(data.id_bobot);
                 },
             	error: function (jqXHR, textStatus, errorThrown)
                 {
                     alert('Error get data from ajax drop bank');
                 }
             });
+        }
+
+        function pick_goalsedit(id)
+        {
         }
 
         function hapus_(id)
