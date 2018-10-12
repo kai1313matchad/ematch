@@ -819,14 +819,14 @@
 
       	function modal_goals(id)
       	{
+      		$("#dtbGoals").dataTable().fnDestroy();
+      		$('#tbgoalcontent').empty();
       		$.ajax({
 	            url : "<?php echo site_url('karyawan/getbobot2_/')?>"+id,
 	            type: "GET",
 	            dataType: "JSON",
             	success: function(data)
                 {
-                    $('#tbgoalcontent').empty();
-                    $("#dtbGoals").dataTable().fnDestroy();
                     for (var i = 0; i < data.length; i++)
                     {
                     	var $tr = $('<tr>').append(
@@ -835,7 +835,7 @@
                     		$('<td class="text-center"><button type="button" onclick="pickGoals('+data[i]["id_bobot"]+')" class="btn btn-primary btn-sm" class="btn btn-default" style="text-transform: capitalize;"> Pilih</button></td>')
                     		).appendTo('#tbgoalcontent');
                     }
-                    dtb_goals();
+                    $('#dtbGoals').DataTable({});
                     $('#modal_goals').modal('show');
                 },
             	error: function (jqXHR, textStatus, errorThrown)
