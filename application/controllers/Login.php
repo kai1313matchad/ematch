@@ -77,10 +77,10 @@ class Login extends CI_Controller {
 
 
 	        // untuk plan otomatis
-	        $updateautoplan = array(
-	        	'id_status' => 2
-	        );
-	        $this->M_kpimmingguannext->updateautoplan($updateautoplan);
+	        // $updateautoplan = array(
+	        // 	'id_status' => 2
+	        // );
+	        // $this->M_kpimmingguannext->updateautoplan($updateautoplan);
 	        // untuk plan
 
             $this->load->view('login');

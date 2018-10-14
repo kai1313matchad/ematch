@@ -836,7 +836,7 @@ class Kpimmingguan extends CI_Controller {
             'status_deadline' => $status_dead,
             'tgs_dept' => $this->input->post('tgs_dept'),
             'usulnilai' => $this->input->post('usulnilai'),
-            'actual' => $this->input->post('usulnilai'),
+            'actual' => '0',
         );
 
         $data['score'] =  $data['bobot'] * $data['actual'];
@@ -952,7 +952,7 @@ class Kpimmingguan extends CI_Controller {
             'status_deadline' => $status_dead,
             'tgs_dept' => $this->input->post('tgs_dept'),
             'usulnilai' => $this->input->post('usulnilaiedit'),
-            'actual' => $this->input->post('usulnilaiedit'),
+            'actual' => '0',
 			);
 
         $data['score'] =  $data['bobot'] * $data['actual'];
