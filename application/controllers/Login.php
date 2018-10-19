@@ -29,48 +29,48 @@ class Login extends CI_Controller {
 
 
 	        // mulai fungsi entri ke kpim
-	        date_default_timezone_set('Asia/Jakarta');
-	        $data_entri = $this->db->get_where('kpim_next', array('tgl' => date('Y-m-d'), 'id_status' => '1'))->result();
+	        // date_default_timezone_set('Asia/Jakarta');
+	        // $data_entri = $this->db->get_where('kpim_next', array('tgl' => date('Y-m-d'), 'id_status' => '1'))->result();
 
-	        foreach ($data_entri as $entri) {
+	        // foreach ($data_entri as $entri) {
 	            
-	            $tgl = $entri->tgl;
-	            $dead = $entri->deadline;
+	        //     $tgl = $entri->tgl;
+	        //     $dead = $entri->deadline;
 
-	            if ($dead < $tgl ) {
-	                $status_dead = 3;
-	            }
-	            elseif ($dead > $tgl ) {
-	                $status_dead = 1;   
-	            }
-	            elseif ($dead == $tgl ) {
-	                $status_dead = 2;   
-	            }
-
-
-	            if ($entri->bobot == '') {
-	                $bobot = '7';
-	            }
-	            else{
-	                $bobot = $entri->bobot;
-	            }
+	        //     if ($dead < $tgl ) {
+	        //         $status_dead = 3;
+	        //     }
+	        //     elseif ($dead > $tgl ) {
+	        //         $status_dead = 1;   
+	        //     }
+	        //     elseif ($dead == $tgl ) {
+	        //         $status_dead = 2;   
+	        //     }
 
 
-	            $isi = array(
-	                'id_karyawan' => $entri->id_karyawan,
-	                'tgl' => $entri->tgl,
-	                'nama_goals' => $entri->nama_goals,
-	                'action' => $entri->action,
-	                'deadline' => $entri->deadline,
-	                'tgs_dept' => $entri->tgs_dept,
-	                'status_deadline' => $status_dead,
-	                'bobot' => $bobot,
-	                'id_status' => '1',
-	                'target' => '10',
-	                'usulnilai' => '0',
-	            );
-	            $this->M_kpimmingguan->get_insert($isi);
-	        }
+	        //     if ($entri->bobot == '') {
+	        //         $bobot = '7';
+	        //     }
+	        //     else{
+	        //         $bobot = $entri->bobot;
+	        //     }
+
+
+	        //     $isi = array(
+	        //         'id_karyawan' => $entri->id_karyawan,
+	        //         'tgl' => $entri->tgl,
+	        //         'nama_goals' => $entri->nama_goals,
+	        //         'action' => $entri->action,
+	        //         'deadline' => $entri->deadline,
+	        //         'tgs_dept' => $entri->tgs_dept,
+	        //         'status_deadline' => $status_dead,
+	        //         'bobot' => $bobot,
+	        //         'id_status' => '1',
+	        //         'target' => '10',
+	        //         'usulnilai' => '0',
+	        //     );
+	        //     $this->M_kpimmingguan->get_insert($isi);
+	        // }
 	        // selesai fungsi entri ke kpim
 
 

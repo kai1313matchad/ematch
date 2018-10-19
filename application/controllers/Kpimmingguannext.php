@@ -283,6 +283,21 @@ class Kpimmingguannext extends CI_Controller {
         echo json_encode($data);
     }
 
+    public function chk_planthisweek()
+    {
+        $this->app_model->getLogin();
+        $key = $this->session->userdata('id_karyawan');
+        $hr = $this->db->get_where('karyawan',array('id_karyawan'=>$key))->row()->harikerja;
+
+        $gt_mon = strtotime('monday this week');
+        $gt_sat = ($hr == '5')?strtotime('next friday',$gt_mon):strtotime('next saturday',$gt_mon);
+        $interval = new DateInterval('P1D');
+        $begin = new DateTime(date('Y-m-d',$gt_mon));
+        $end = new DateTime(date('Y-m-d',$gt_sat));
+        $end = $end->modify('+1 day');
+        $gt_per = new DatePeriod($begin, $interval ,$end);
+    }
+
     public function getplantosend_()
     {
         $this->app_model->getLogin();

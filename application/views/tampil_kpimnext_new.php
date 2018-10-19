@@ -342,7 +342,6 @@
                     <table id="dataTablenext" class="table table-bordered table-hover table-striped" cellspacing="0" width="100%">
                         <thead class="text-center" style="background-color: #6db1ff">
                             <tr>
-                            	<!-- <th class="text-center">No</th> -->
 								<th class="text-center">Hari/Tanggal</th>
 								<th class="text-center">Goal</th>
 								<th class="text-center">Description</th>
@@ -363,6 +362,7 @@
 					<div class="col-sm-3" style="float: right;">
 						<button class= "btn btn-primary" style="font-family: 'Exo 2', sans-serif; margin-top:5px;" onclick="ayo(); printContent('div1'); window.location.reload();return false;"><span class="glyphicon glyphicon-print"></span> Print</button>
 						<a class= "btn btn-primary" style="font-family: 'Exo 2', sans-serif; margin-top:5px;" href="<?php echo base_url();?>home"><span class="glyphicon glyphicon-home"></span><h7>  Home</h7></a>
+						<!-- <button type="button" class="btn btn-warning btnHide" style="font-family: 'Exo 2'; margin-top:5px; display: none;"  onclick="opensendaddplan()">Send Plan Tambahan</button> -->
 						<button type="button" class="btn btn-warning" style="font-family: 'Exo 2'; margin-top:5px"  onclick="opensendplan()">Send</button>
 					</div>
 				</div>
@@ -564,7 +564,7 @@
 	<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 	<script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
-	<script src="<?php echo base_url();?>assets/js/moment.js"></script>
+	<script src="<?php echo base_url();?>assets/js/moment-with-locales.js"></script>
 	<script src="<?php echo base_url();?>assets/js/bootstrap-datetimepicker.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.2/js/bootstrap-select.js"></script>
 	<script>
@@ -610,6 +610,24 @@
             // 	get_dl(($('#konten option:selected').val()!='')?$('#konten option:selected').val():0);
             // });
 		})
+
+		function chkPlan()
+		{
+			$.ajax({
+	            url : "<?php echo site_url('Kpimmingguannext/chk_planthisweek')?>",
+	            type: "GET",
+	            // data: $('form').serialize(),
+	            dataType: "JSON",
+            	success: function(data)
+                {
+                	
+                },
+            	error: function (jqXHR, textStatus, errorThrown)
+                {
+                    alert('Error get data from ajax drop bank');
+                }
+            });
+		}
 
 		function add_plan()
 		{
@@ -788,7 +806,7 @@
                 		var tgl_in = Date.parse(data[i]["tgl"]);
                 		var tgl_dl = Date.parse(data[i]["deadline"]);
                 		var $tr = $('<tr>').append(
-                			$('<td class="text-center" data-order="'+tgl_in+'">'+data[i]["tgl"]+'</td>'),
+                			$('<td class="text-center" data-order="'+tgl_in+'">'+moment(data[i]["tgl"]).locale('id').format('dddd, DD-MM-YYYY')+'</td>'),
                 			$('<td class="text-center">'+data[i]["nama_goals"]+'</td>'),
                 			$('<td class="text-center">'+data[i]["action"]+'</td>'),
                 			$('<td class="text-center" data-order="'+tgl_dl+'">'+data[i]["deadline"]+'</td>'),
@@ -847,6 +865,8 @@
 
       	function openGoals()
       	{
+      		$("#dtbGoals").dataTable().fnDestroy();
+      		$('#tbgoalcontent').empty();
       		var id = $('#pilihdept option:selected').val();
       		if(id!='all')
       		{
@@ -866,7 +886,7 @@
 	                    		$('<td class="text-center"><button type="button" onclick="pickGoals('+data[i]["id_bobot"]+')" class="btn btn-primary btn-sm" class="btn btn-default" style="text-transform: capitalize;"> Pilih</button></td>')
 	                    		).appendTo('#tbgoalcontent');
 	                    }
-	                    dtb_goals();
+	                    $('#dtbGoals').DataTable({});
 	                    $('#modal_goals').modal('show');
 	                },
 	            	error: function (jqXHR, textStatus, errorThrown)
