@@ -631,31 +631,39 @@
 
 		function add_plan()
 		{
-			$.ajax({
-	            url : "<?php echo site_url('Kpimmingguannext/add_plannext')?>",
-	            type: "POST",
-	            data: $('form').serialize(),
-	            dataType: "JSON",
-            	success: function(data)
-                {
-                	if(data.status)
-                	{
-                		$("#dataTablenext").dataTable().fnDestroy();
-                		get_list();
-                		// drop_goals(0);
-                		$('#form_kpim')[0].reset();
-                		$('#pilihdept').selectpicker('refresh');
-                	}
-                	else
-                	{
-                		var dv = $('<div class="col-sm-12">').append(data.lb_msg).appendTo('#alert_');
-                	}
-                },
-            	error: function (jqXHR, textStatus, errorThrown)
-                {
-                    alert('Error get data from ajax drop bank');
-                }
-            });
+			var rs = validate_()
+			if(rs > 0 )
+			{
+				alert('Data Belum Lengkap');
+			}
+			else
+			{
+				$.ajax({
+		            url : "<?php echo site_url('Kpimmingguannext/add_plannext')?>",
+		            type: "POST",
+		            data: $('form').serialize(),
+		            dataType: "JSON",
+	            	success: function(data)
+	                {
+	                	if(data.status)
+	                	{
+	                		$("#dataTablenext").dataTable().fnDestroy();
+	                		get_list();
+	                		// drop_goals(0);
+	                		$('#form_kpim')[0].reset();
+	                		$('#pilihdept').selectpicker('refresh');
+	                	}
+	                	else
+	                	{
+	                		var dv = $('<div class="col-sm-12">').append(data.lb_msg).appendTo('#alert_');
+	                	}
+	                },
+	            	error: function (jqXHR, textStatus, errorThrown)
+	                {
+	                    alert('Error get data from ajax drop bank');
+	                }
+	            });
+			}
 		}
 
 		function upd_plan()
@@ -1007,6 +1015,37 @@
         {
         	$('[name="id_plan_hps"]').val(id);
         	$('#modal_hapus').modal('show');
+        }
+
+        function validate_()
+        {
+        	var cou = 0;
+        	var date1 = $('[name="tgl"]').val();
+            if (date1 == '')
+            {
+                cou = cou+1;
+            }
+            var dept = $('[name="tgs_dept"]').val();
+            if (dept == 'all')
+            {
+                cou = cou+1;
+            }
+            var goals = $('[name="goalsNm"]').val();
+            if (goals == '')
+            {
+                cou = cou+1;
+            }
+            var act = $('[name="action"]').val();
+            if (act == '')
+            {
+                cou = cou+1;
+            }
+            var dl = $('[name="deadline"]').val();
+            if (dl == '')
+            {
+                cou = cou+1;
+            }
+            return cou;
         }
 	</script>
 </body>
