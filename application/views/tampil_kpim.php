@@ -1014,6 +1014,7 @@ if ($this->session->userdata('harikerja') == 5 ) {
 									<div class="col-lg-10 ">
 										<div id='datetimepicker_tgledit'>
 										<div class="col-sm-12" style="margin: 5px 5px 0px 0px; font-weight: bold;"><?php echo date("d-m-Y", strtotime($u->tgl)) ?></div>
+											<input type="hidden" name="tgledit" value="<?php echo date("d-m-Y", strtotime($u->tgl)) ?>">
 											<!-- <input id="MyDate<?php echo $u->id ?>" value="<?php echo $u->tgl ?>" type='hidden' class="form-control" name="tgledit" placeholder="Tanggal" /> --> 
 										</div>
 									</div>

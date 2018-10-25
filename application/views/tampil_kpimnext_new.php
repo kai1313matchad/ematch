@@ -362,7 +362,7 @@
 					<div class="col-sm-3" style="float: right;">
 						<button class= "btn btn-primary" style="font-family: 'Exo 2', sans-serif; margin-top:5px;" onclick="ayo(); printContent('div1'); window.location.reload();return false;"><span class="glyphicon glyphicon-print"></span> Print</button>
 						<a class= "btn btn-primary" style="font-family: 'Exo 2', sans-serif; margin-top:5px;" href="<?php echo base_url();?>home"><span class="glyphicon glyphicon-home"></span><h7>  Home</h7></a>
-						<!-- <button type="button" class="btn btn-warning btnHide" style="font-family: 'Exo 2'; margin-top:5px; display: none;"  onclick="opensendaddplan()">Send Plan Tambahan</button> -->
+						<button type="button" class="btn btn-warning btnHide" style="font-family: 'Exo 2'; margin-top:5px;"  onclick="chkPlan()">Send Plan Tambahan</button>
 						<button type="button" class="btn btn-warning" style="font-family: 'Exo 2'; margin-top:5px"  onclick="opensendplan()">Send</button>
 					</div>
 				</div>
@@ -560,6 +560,31 @@
 		    </div>
 		</div>
 	</div>
+	<div class="modal fade" id="modal_sendadd" role="dialog" style="padding-top: 100px;">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+		        	<button type="button" class="close" data-dismiss="modal">&times;</button>
+		          	<h4 class="modal-title text-center" id="myModalLabel"><b>Konfirmasi</b></h4>
+		        </div>
+		        <div class="modal-body" style="background-color: #2372ef; color: white;">
+		        	<div class="row" id="alertSendAdd_">
+
+					</div>
+					<div class="row">
+						<div class="col-xs-12"><h3 class="text-center">Anda Akan Menambakan Plan Minggu Ini Pada Tanggal</h3></div>
+						<div class="col-xs-12 text-center" id="planAdd">
+							
+						</div>
+					</div>
+		       	</div>
+		        <div class="modal-footer">
+		        	<button type="button" style="font-family: 'Exo 2', sans-serif;" class="btn btn-default" data-dismiss="modal">Batal</button>
+					<button type="button" style="font-family: 'Exo 2', sans-serif;" name="input"  class="btn btn-primary" onclick="sendaddplan_()">Kirim</button>
+		        </div>
+		    </div>
+		</div>
+	</div>
 	<!-- JS -->
 	<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -613,20 +638,56 @@
 
 		function chkPlan()
 		{
+			$('#alertSendAdd_').empty();
 			$.ajax({
 	            url : "<?php echo site_url('Kpimmingguannext/chk_planthisweek')?>",
 	            type: "GET",
-	            // data: $('form').serialize(),
 	            dataType: "JSON",
             	success: function(data)
                 {
-                	
+                	if(data.status)
+                	{
+                		$('#planAdd').empty();
+                		for (var i = 0; i < data['perplan'].length; i++)
+	                	{
+	                		var v = $('<h4>').append(moment(data['perplan'][i]).locale('id').format('dddd, DD-MM-YYYY')).appendTo('#planAdd');
+	                	}
+                	}
+                	else
+                	{
+                		var dv = $('<div class="col-sm-12">').append('<div class="alert alert-danger alert-dismissable"><a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>Plan Anda Minggu Ini Tidak Lengkap, Tidak Input Pada Tanggal '+data.res+'</div>').appendTo('#alertSendAdd_');
+                	}
+                	$('#modal_sendadd').modal('show');
                 },
             	error: function (jqXHR, textStatus, errorThrown)
                 {
                     alert('Error get data from ajax drop bank');
                 }
             });
+		}
+
+		function sendaddplan_()
+		{
+			$.ajax({
+		        url : "<?php echo site_url('Kpimmingguannext/sendPlanAdd')?>",
+		        type: "GET",
+		        dataType: "JSON",
+	            success: function(data)
+	            {
+	            	if(data.status)
+	                {
+	                	window.location.reload(true);
+	                }
+	                else
+	                {
+	                	var dv = $('<div class="col-sm-12">').append('<div class="alert alert-danger alert-dismissable"><a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>Plan Anda Minggu Ini Tidak Lengkap, Tidak Input Pada Tanggal '+data.res+'</div>').appendTo('#alertSendAdd_');
+	                }
+	            },
+	            error: function (jqXHR, textStatus, errorThrown)
+	            {
+	            	alert('Send Plan Add Error');
+	            }
+	        });
 		}
 
 		function add_plan()
@@ -649,7 +710,6 @@
 	                	{
 	                		$("#dataTablenext").dataTable().fnDestroy();
 	                		get_list();
-	                		// drop_goals(0);
 	                		$('#form_kpim')[0].reset();
 	                		$('#pilihdept').selectpicker('refresh');
 	                	}
@@ -752,11 +812,11 @@
                 	$('#periodeplan').empty();
                 	for (var i = 0; i < data['period'].length; i++)
                 	{
-                		var v = $('<h4>').append(data['period'][i]).appendTo('#periode');
+                		var v = $('<h4>').append(moment(data['period'][i]).locale('id').format('dddd, DD-MM-YYYY')).appendTo('#periode');
                 	}
                 	for (var i = 0; i < data['perplan'].length; i++)
                 	{
-                		var v = $('<h4>').append(data['perplan'][i]).appendTo('#periodeplan');
+                		var v = $('<h4>').append(moment(data['perplan'][i]).locale('id').format('dddd, DD-MM-YYYY')).appendTo('#periodeplan');
                 	}
                 	$('#modal_send').modal('show');
                 },

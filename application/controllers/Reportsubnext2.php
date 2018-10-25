@@ -12,64 +12,133 @@ class Reportsubnext2 extends CI_Controller {
         $this->load->helper(array('url', 'form', 'text', 'html', 'security', 'file', 'directory', 'number', 'date', 'download', 'tgl_indo'));
 	}
 
-	public function index()
-	{
-        $this->app_model->getLogin();
+	// public function index()
+	// {
+ //        $this->app_model->getLogin();
 
-        if (($this->session->userdata('level') == 2 AND $this->session->userdata('hak_akses') == 0)  ) {
+ //        if (($this->session->userdata('level') == 2 AND $this->session->userdata('hak_akses') == 0)  ) {
+ //            $this->session->set_flashdata('message_name', 'Mohon maaf, Anda tidak dapat mengakses halaman Report Sub');
+ //            redirect(base_url() . 'Home', 'refresh');
+ //        }
+ //        $data['profilku'] = $this->M_kpimmingguan->getdataku()->result();
+
+ //        $keyjabatan = $this->session->userdata('id_karyawan');
+ //        $data['jabatan'] = $this->M_reportsubnext2->getJabatan($keyjabatan);
+
+ //        $keydept = $this->session->userdata('id_karyawan');
+ //        $data['dept'] = $this->M_reportsubnext2->getDept($keydept);
+
+ //        $this->load->model(array('M_pilihkaryawannext', 'app_model'));
+
+ //        $data['ambilkaryawanall'] = $this->M_reportsubnext2->ambilkaryawanall();
+ //        $data['isidept'] = $this->M_pilihkaryawannext->ambilDept();
+
+ //       //mulai dept
+
+ //        $this->db->where('id_karyawan', $keydept);
+ //        $query = $this->db->get('karyawan');
+ //        if($query->num_rows()>0)
+ //        {
+ //            foreach ($query->result() as $row) {
+ //            $dept = $row->dept;
+ //            }
+ //        }
+
+ //        $id_dept = explode(',', $dept);
+ //        $this->db->where_in('id_dept', $id_dept);
+ //        $query2 = $this->db->get('dept');
+
+ //        if($query2->num_rows()>0)
+ //        {
+ //            /*echo "<select>";;
+ //            foreach ($query2->result() as $rows) 
+ //            {
+ //            echo "<option value'".$rows->$id_dept."'>".$rows->nama_dept."</option>";
+
+ //            }
+ //            echo "</select>";*/
+
+ //            $data['isinamadept'] = $query2;
+            
+
+ //        }
+ //        //selesai tampilkan dept
+
+
+ //        $this->load->view('tampil_pilihkaryawannext',$data);
+
+
+
+	// }
+
+    function index()
+    {
+        $this->app_model->getLogin();
+        $key = $this->session->userdata('id_karyawan');
+        if (($this->session->userdata('level') == 2 AND $this->session->userdata('hak_akses') == 0))
+        {
             $this->session->set_flashdata('message_name', 'Mohon maaf, Anda tidak dapat mengakses halaman Report Sub');
             redirect(base_url() . 'Home', 'refresh');
         }
         $data['profilku'] = $this->M_kpimmingguan->getdataku()->result();
+        $data['jabatan'] = $this->M_reportsubnext2->getJabatan($key)->result();
+        $data['dept'] = $this->M_reportsubnext2->getDept($key)->result();
+        $getDept = $this->db->get_where('karyawan',array('id_karyawan'=>$key))->row()->dept;
+        $id_dept = explode(',', $getDept);
+        $this->db->where_in('id_dept', $id_dept);
+        $query2 = $this->db->get('dept');
+        $data['isinamadept'] = $query2;
 
+        $this->load->view('tampil_pilihkaryawannext_new',$data);
+    }
+
+    function test_()
+    {
+        $this->app_model->getLogin();
+
+        if( $this->input->post('pilihkar')==null )
+        {
+            redirect(base_url() . 'Reportsubnext2', 'refresh');
+        }
+        
         $keyjabatan = $this->session->userdata('id_karyawan');
+        $data['profilku'] = $this->M_kpimmingguan->getdataku()->result();
         $data['jabatan'] = $this->M_reportsubnext2->getJabatan($keyjabatan);
 
         $keydept = $this->session->userdata('id_karyawan');
         $data['dept'] = $this->M_reportsubnext2->getDept($keydept);
-
-        $this->load->model(array('M_pilihkaryawannext', 'app_model'));
-
         $data['ambilkaryawanall'] = $this->M_reportsubnext2->ambilkaryawanall();
-        $data['isidept'] = $this->M_pilihkaryawannext->ambilDept();
+        //print_r($username);
+        //die();
+        $val_pilih = $this->input->post('pilihkar');
+        $tglstart = $this->input->post('tglstart');
+        $tglend = $this->input->post('tglend');
+        $data['table'] = $this->M_reportsubnext2->getAll($val_pilih, $tglstart, $tglend)->result();    
+        
 
-       //mulai dept
+        //if ($val_pilih) {
+          //  $data['table'] = $this->M_reportsub->getAll($val_pilih)->result();    
+        //}
+        //untuk tampilan seleksi
+        $data['idkar'] = $this->input->post('pilihkar');
+        $data['nama'] = $this->M_reportsubnext2->tampilkannamakar($this->input->post('pilihkar'));
+        $data['piltglstart'] = $this->input->post('tglstart');
+        $data['piltglend'] = $this->input->post('tglend');
+        
+        $this->load->view('tampil_reportsubnext2',$data);
+    }
 
-        $this->db->where('id_karyawan', $keydept);
-        $query = $this->db->get('karyawan');
-        if($query->num_rows()>0)
-        {
-            foreach ($query->result() as $row) {
-            $dept = $row->dept;
-            }
-        }
-
-        $id_dept = explode(',', $dept);
-        $this->db->where_in('id_dept', $id_dept);
-        $query2 = $this->db->get('dept');
-
-        if($query2->num_rows()>0)
-        {
-            /*echo "<select>";;
-            foreach ($query2->result() as $rows) 
-            {
-            echo "<option value'".$rows->$id_dept."'>".$rows->nama_dept."</option>";
-
-            }
-            echo "</select>";*/
-
-            $data['isinamadept'] = $query2;
-            
-
-        }
-        //selesai tampilkan dept
-
-
-        $this->load->view('tampil_pilihkaryawannext',$data);
-
-
-
-	}
+    function get_karyawanterbaru()
+    {
+        $iddept = $this->input->post('iddept');
+        $idkar = $this->input->post('idkar');
+        $idjab = $this->input->post('jab');
+        $hak = $this->input->post('hak');
+        $hak_akses = explode(',', $hak);
+        $this->load->model('M_pilihkaryawan');
+        $result = $this->M_pilihkaryawan->untukallterbaru_($iddept, $idkar, $hak_akses);
+        return $result;
+    }
 
     function get_karyawan() {
         if('IS_AJAX') {
@@ -101,7 +170,7 @@ class Reportsubnext2 extends CI_Controller {
 
         
             $this->load->model('M_pilihkaryawan');
-        $result = $this->M_pilihkaryawan->untukall($key, $idses, $hak_akses);
+        $result = $this->M_pilihkaryawan->untukall_($key, $idses, $hak_akses);
         return $result;
         
     }
@@ -148,12 +217,14 @@ class Reportsubnext2 extends CI_Controller {
         return $result;
     }
 
-    function berinilai(){
-         $this->app_model->getLogin();
+    function berinilai()
+    {
+        $this->app_model->getLogin();
 
-         if( $this->input->post('pilihkar')==null ){
+        if( $this->input->post('pilihkar')==null )
+        {
             redirect(base_url() . 'Reportsubnext2', 'refresh');
-         }
+        }
         
         $keyjabatan = $this->session->userdata('id_karyawan');
         $data['profilku'] = $this->M_kpimmingguan->getdataku()->result();

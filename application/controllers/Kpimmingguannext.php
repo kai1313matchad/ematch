@@ -296,6 +296,139 @@ class Kpimmingguannext extends CI_Controller {
         $end = new DateTime(date('Y-m-d',$gt_sat));
         $end = $end->modify('+1 day');
         $gt_per = new DatePeriod($begin, $interval ,$end);
+        $gt_perarr = array();
+        foreach ($gt_per as $dt)
+        {
+            $gt_perarr[] = $dt->format('Y-m-d');
+        }
+        $getplan2 = $this->db->group_by('tgl')->order_by('tgl asc')->get_where('kpim_next','id_karyawan = "'.$key.'" AND id_status ="2" AND (tgl BETWEEN "'.date('Y-m-d',$gt_mon).'" AND "'.date('Y-m-d',$gt_sat).'")')->result();
+        $gt_perplan2 = array();
+        foreach ($getplan2 as $gp)
+        {
+            $gt_perplan2[] = $gp->tgl;
+        }
+        $getplan = $this->db->group_by('tgl')->order_by('tgl asc')->get_where('kpim_next','id_karyawan = "'.$key.'" AND id_status ="1" AND (tgl BETWEEN "'.date('Y-m-d',$gt_mon).'" AND "'.date('Y-m-d',$gt_sat).'")')->result();
+        $gt_perplan = array();
+        foreach ($getplan as $gp)
+        {
+            $gt_perplan[] = $gp->tgl;
+        }
+        $gethol = $this->db->get_where('hari_libur','tgl BETWEEN "'.date('Y-m-d',$gt_mon).'" AND "'.date('Y-m-d',$gt_sat).'"')->result();
+        $gt_hol = array();
+        foreach ($gethol as $gh)
+        {
+            $gt_hol[] = $gh->tgl;
+        }
+        $gtpernew = array_diff($gt_perarr,$gt_hol);
+        $gt_pernew = array();
+        foreach ($gtpernew as $gn)
+        {
+            $gt_pernew[] = $gn;
+        }
+        $result = array_diff($gt_pernew, $gt_perplan2);
+        $deci = (count($result)>0)?$data['status'] = FALSE:$data['status'] = TRUE;
+        $data['perplan2'] = $gt_perplan2;
+        $data['perplan'] = $gt_perplan;
+        $data['hol'] = $gt_hol;
+        $data['pernew'] = $gt_pernew;
+        $data['res'] = implode(', ',$result);
+        echo json_encode($data);
+    }
+
+    public function sendPlanAdd()
+    {
+        $this->app_model->getLogin();
+        $key = $this->session->userdata('id_karyawan');
+        $hr = $this->db->get_where('karyawan',array('id_karyawan'=>$key))->row()->harikerja;
+
+        $gt_mon = strtotime('monday this week');
+        $gt_sat = ($hr == '5')?strtotime('next friday',$gt_mon):strtotime('next saturday',$gt_mon);
+        $interval = new DateInterval('P1D');
+        $begin = new DateTime(date('Y-m-d',$gt_mon));
+        $end = new DateTime(date('Y-m-d',$gt_sat));
+        $end = $end->modify('+1 day');
+        $gt_per = new DatePeriod($begin, $interval ,$end);
+        $gt_perarr = array();
+        foreach ($gt_per as $dt)
+        {
+            $gt_perarr[] = $dt->format('Y-m-d');
+        }
+        $getplan2 = $this->db->group_by('tgl')->order_by('tgl asc')->get_where('kpim_next','id_karyawan = "'.$key.'" AND id_status ="2" AND (tgl BETWEEN "'.date('Y-m-d',$gt_mon).'" AND "'.date('Y-m-d',$gt_sat).'")')->result();
+        $gt_perplan2 = array();
+        foreach ($getplan2 as $gp)
+        {
+            $gt_perplan2[] = $gp->tgl;
+        }
+        $getplan = $this->db->group_by('tgl')->order_by('tgl asc')->get_where('kpim_next','id_karyawan = "'.$key.'" AND id_status ="1" AND (tgl BETWEEN "'.date('Y-m-d',$gt_mon).'" AND "'.date('Y-m-d',$gt_sat).'")')->result();
+        $gt_perplan = array();
+        foreach ($getplan as $gp)
+        {
+            $gt_perplan[] = $gp->tgl;
+        }
+        $gethol = $this->db->get_where('hari_libur','tgl BETWEEN "'.date('Y-m-d',$gt_mon).'" AND "'.date('Y-m-d',$gt_sat).'"')->result();
+        $gt_hol = array();
+        foreach ($gethol as $gh)
+        {
+            $gt_hol[] = $gh->tgl;
+        }
+        $gtpernew = array_diff($gt_perarr,$gt_hol);
+        $gt_pernew = array();
+        foreach ($gtpernew as $gn)
+        {
+            $gt_pernew[] = $gn;
+        }
+        $result = array_diff($gt_pernew, $gt_perplan2);
+        if(count($result)>0)
+        {
+            $data['res'] = implode(', ',$result);
+            $data['status'] = FALSE;
+        }
+        else
+        {
+            //Update dan Kirim Ke KPIM Mingguan
+            $getplanall = $this->db->order_by('tgl asc')->get_where('kpim_next','id_karyawan = "'.$key.'" AND id_status ="1" AND (tgl BETWEEN "'.date('Y-m-d',$gt_mon).'" AND "'.date('Y-m-d',$gt_sat).'")')->result();
+            foreach ($getplanall as $entry)
+            {
+                date_default_timezone_set('Asia/Jakarta');
+                $planid = $entry->id;
+                $tgl_input = $entry->tgl;
+                $dl = $entry->deadline;
+                if ($dl < $tgl_input )
+                {
+                    $sts_dl = 3;
+                }
+                elseif ($dl > $tgl_input )
+                {
+                    $sts_dl = 1;   
+                }
+                elseif ($dl == $tgl_input )
+                {
+                    $sts_dl = 2;   
+                }
+
+                $bobot = ($entry->bobot != '')?$entry->bobot:'5';
+
+                $isi = array(
+                    'id_karyawan' => $key,
+                    'tgl' => $tgl_input,
+                    'nama_goals' => $entry->nama_goals,
+                    'action' => $entry->action,
+                    'deadline' => $dl,
+                    'tgs_dept' => $entry->tgs_dept,
+                    'status_deadline' => $sts_dl,
+                    'bobot' => $bobot,
+                    'id_status' => '1',
+                    'target' => '10',
+                    'usulnilai' => '0',
+                );
+                $this->M_kpimmingguan->get_insert($isi);
+                //Update Status Plan
+                $up = array('id_status'=>'2');
+                $up_plan = $this->db->update('kpim_next',$up,array('id'=>$planid));
+            }
+            $data['status'] = TRUE;
+        }
+        echo json_encode($data);
     }
 
     public function getplantosend_()
