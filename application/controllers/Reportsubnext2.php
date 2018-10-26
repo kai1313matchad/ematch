@@ -108,24 +108,60 @@ class Reportsubnext2 extends CI_Controller {
         $keydept = $this->session->userdata('id_karyawan');
         $data['dept'] = $this->M_reportsubnext2->getDept($keydept);
         $data['ambilkaryawanall'] = $this->M_reportsubnext2->ambilkaryawanall();
-        //print_r($username);
-        //die();
         $val_pilih = $this->input->post('pilihkar');
         $tglstart = $this->input->post('tglstart');
         $tglend = $this->input->post('tglend');
         $data['table'] = $this->M_reportsubnext2->getAll($val_pilih, $tglstart, $tglend)->result();    
         
-
-        //if ($val_pilih) {
-          //  $data['table'] = $this->M_reportsub->getAll($val_pilih)->result();    
-        //}
-        //untuk tampilan seleksi
         $data['idkar'] = $this->input->post('pilihkar');
         $data['nama'] = $this->M_reportsubnext2->tampilkannamakar($this->input->post('pilihkar'));
         $data['piltglstart'] = $this->input->post('tglstart');
         $data['piltglend'] = $this->input->post('tglend');
         
-        $this->load->view('tampil_reportsubnext2',$data);
+        $this->load->view('tampil_reportsubnext2_new',$data);
+    }
+
+    function get_allplannext()
+    {
+        $this->app_model->getLogin();
+        $key = $this->input->post('subordinat');
+        $start = $this->input->post('tglstart');
+        $end = $this->input->post('tglend');
+        $data = $this->db->join('dept b','b.id_dept = a.tgs_dept')->join('karyawan c','c.id_karyawan = a.id_karyawan')->where('a.id_karyawan = "'.$key.'" AND a.id_status = "1" AND (tgl BETWEEN "'.$start.'" AND "'.$end.'")')->order_by('a.tgl','asc')->get('kpim_next a')->result();
+        echo json_encode($data);
+    }
+
+    function get_plannext($id)
+    {
+        $this->app_model->getLogin();
+        $data = $this->db->get_where('kpim_next',array('id'=>$id))->row();
+        echo json_encode($data);
+    }
+
+    function up_notesplannext()
+    {
+        $this->app_model->getLogin();
+        $key = $this->input->post('subid_notes');
+        $notes = $this->input->post('notes');
+        $upnote = array(
+            'note'=>$notes,
+            'notif_note'=>'1'
+        );
+        $this->db->update('kpim_next',$upnote,array('id'=>$key));
+        $data['status'] = TRUE;
+        echo json_encode($data);
+    }
+
+    function approve_plannext($id)
+    {
+        $this->app_model->getLogin();
+        $key = $this->input->post('subid_notes');
+        $upplan = array(
+            'id_approve'=>'1'
+        );
+        $this->db->update('kpim_next',$upplan,array('id'=>$key));
+        $data['status'] = TRUE;
+        echo json_encode($data);
     }
 
     function get_karyawanterbaru()

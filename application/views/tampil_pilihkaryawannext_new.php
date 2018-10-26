@@ -108,7 +108,7 @@
 		<div class="row"> 
 			<h4><div class="col-sm-12 text-center" style="padding-top: 10px">KPIM Plan Next</div></h4>
 		</div>
-		<form id="form_kpim" action="<?php echo base_url();?>reportsubnext2/berinilai/" method="POST">
+		<form id="form_kpim" action="<?php echo base_url();?>reportsubnext2/test_" method="POST">
 			<div class="row" style="padding-top: 15px">
 				<div class="col-sm-3"> 
 					<text style="word-spacing: 10px">Departement :</text>

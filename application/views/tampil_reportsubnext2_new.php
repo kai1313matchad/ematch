@@ -100,15 +100,18 @@
 	<div class="container">
 		<div class="background">
 			<div id='div1'>
+				<input type="hidden" name="subordinat" value="<?= $nama->id_karyawan ?>">
+				<input type="hidden" name="tglstart" value="<?= $piltglstart ?>">
+				<input type="hidden" name="tglend" value="<?= $piltglend ?>">
 				<h1 style="padding-top: 20px"><center>KPIM Online - Plan Next Week</center></h1><br><br>
 				<div class="row">
 					<div class="col-lg-6 text-left">
-						<h4><text style="word-spacing: 20px">Nama </text> <text style="word-spacing: 30px;">:<?php echo $nama->nama_karyawan; ?></text></h4>
+						<h4><text style="word-spacing: 20px">Nama </text> <text>: <?php echo $nama->nama_karyawan; ?></text></h4>
 					</div>
 				</div>
 				<div class="row">
 					<div class="col-lg-6 text-left">
-						<h4 style="word-spacing: 5px">Tanggal <text style="word-spacing: 30px;">: </text>  <text style="word-spacing: 30px;"> <?php echo date("d-m-Y", strtotime($piltglstart)) ?> </text><text style="color: #c96604; font-style: italic; word-spacing: 30px;"> sampai </text><?php echo date("d-m-Y", strtotime($piltglend)) ?></h4> 
+						<h4 style="word-spacing: 5px">Tanggal <text>: </text>  <text name="tglStart"></text><text style="color: #c96604; font-style: italic;"> S/D </text><text name="tglEnd"></text></h4> 
 					</div>
 				</div>
 				<br/>
@@ -117,14 +120,14 @@
 						<table class="table table-bordered table-hover table-striped">
 							<thead class="text-center" style="background-color: #f9bc2c">
 							  <tr>
-								<th class="text-center" ">No</th>
-								<th class="text-center" ">Tanggal</th>
-								<th class="text-center" ">Goal</th>
-								<th class="text-center" ">Action</th>
-								<th class="text-center" ">Departement</th>
-								<th class="text-center" ">Deadline</th>
-								<th class="text-center" " colspan="2">Approved</th>
-								<th class="text-center" " colspan="2">Note</th>
+								<!-- <th class="text-center">No</th> -->
+								<th class="col-xs-1 text-center">Tanggal</th>
+								<th class="col-xs-2 text-center">Goal</th>
+								<th class="col-xs-3 text-center">Action</th>
+								<th class="col-xs-1 text-center">Departement</th>
+								<th class="col-xs-1 text-center">Deadline</th>
+								<th class="col-xs-1 text-center">Approved</th>
+								<th class="col-xs-3 text-center">Note</th>
 							  </tr>
 							</thead>
 							<tbody id="tbContent">
@@ -197,6 +200,32 @@
 				</div>
 			</div>
 	</div>
+	<div class="modal fade" id="modal_noteAdd" role="dialog" style="padding-top: 100px;">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+		        	<button type="button" class="close" data-dismiss="modal">&times;</button>
+		          	<h4 class="modal-title text-center" id="myModalLabel"><b>Tulis Catatan</b></h4>
+		        </div>
+		        <div class="modal-body" style="background-color: #2372ef; color: white;">
+		        	<form id="form_note" class="form-horizontal">
+		        		<div class="row">
+		        			<div class="form-group">
+		        				<div class="col-xs-offset-2 col-xs-8">
+		        					<textarea class="form-control" name="notes"></textarea>
+		        					<input type="hidden" name="subid_notes">
+		        				</div>
+		        			</div>
+		        		</div>
+		        	</form>
+		       	</div>
+		        <div class="modal-footer">
+		        	<button type="button" style="font-family: 'Exo 2', sans-serif;" class="btn btn-default" data-dismiss="modal">Batal</button>
+					<button type="button" style="font-family: 'Exo 2', sans-serif;" name="input"  class="btn btn-primary" onclick="saveNote_()">Simpan</button>
+		        </div>
+		    </div>
+		</div>
+	</div>
 	<!-- modal -->
 	<!-- JS -->
 	<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
@@ -206,6 +235,122 @@
 	<script src="<?php echo base_url();?>assets/js/bootstrap-datetimepicker.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.2/js/bootstrap-select.js"></script>
 	<script>
+		$(document).ready(function(){
+			getTables();
+			$('[name="tglStart"]').text(moment(<?= $piltglstart; ?>).locale('id').format('dddd, DD-MM-YYYY'));
+			$('[name="tglEnd"]').text(moment(<?= $piltglend; ?>).locale('id').format('dddd, DD-MM-YYYY'));
+		})
+		function getTables()
+		{
+			$('#tbContent').empty();
+			$.ajax({
+	            url : "<?php echo site_url('Reportsubnext2/get_allplannext')?>",
+	            type: "POST",
+	            data: $('input').serialize(),
+	            dataType: "JSON",
+            	success: function(data)
+                {
+                	for (var i = 0; i < data.length; i++)
+                	{
+                		var tgl_in = Date.parse(data[i]["tgl"]);
+                		var tgl_dl = Date.parse(data[i]["deadline"]);
+                		var note = (data[i]["note"] == null)?'':data[i]["note"];
+                		var btn = (data[i]["id_approve"] != '0')?'<td class="text-center"><button type="button" onclick="disapprove_('+data[i]["id"]+')" class="btn btn-success btn-sm"><span class="glyphicon glyphicon-ok"></span></button></td>':'<td class="text-center"><button type="button" onclick="approve_('+data[i]["id"]+')" class="btn btn-danger btn-sm"><span class="glyphicon glyphicon-remove"></span></button></td>';
+                		var $tr = $('<tr>').append(
+                			$('<td class="text-center" data-order="'+tgl_in+'">'+moment(data[i]["tgl"]).locale('id').format('dddd, DD-MM-YYYY')+'</td>'),
+                			$('<td class="text-center">'+data[i]["nama_goals"]+'</td>'),
+                			$('<td class="text-center">'+data[i]["action"]+'</td>'),
+                			$('<td class="text-center">'+data[i]["nama_dept"]+'</td>'),
+                			$('<td class="text-center" data-order="'+tgl_dl+'">'+moment(data[i]["deadline"]).locale('id').format('dddd, DD-MM-YYYY')+'</td>'),
+                			$(btn),
+                			$('<td><button type="button" onclick="note_('+data[i]["id"]+')" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-pencil"></span></button><br>'+note+'</td>')
+                		).appendTo('#tbContent');
+                	}
+                	dtables();
+                },
+            	error: function (jqXHR, textStatus, errorThrown)
+                {
+                    alert('Error get data from ajax drop bank');
+                }
+            });
+		}
+		function dtables()
+      	{
+	        $('#dataTablenext').DataTable({
+	          order: [[0, 'desc']],
+	        });
+      	}
+		function note_(id)
+		{
+			$.ajax({
+	            url : "<?php echo site_url('Reportsubnext2/get_plannext/')?>"+id,
+	            type: "GET",
+	            dataType: "JSON",
+            	success: function(data)
+                {
+                	var note = (data.note == null)?'':data.note;
+                	$('[name="notes"]').val(note);
+                	$('[name="subid_notes"]').val(data.id);
+                	$('#modal_noteAdd').modal('show');
+                },
+            	error: function (jqXHR, textStatus, errorThrown)
+                {
+                    alert('Error get data from ajax drop bank');
+                }
+            });
+		}
+		function saveNote_()
+		{
+			if($('[name="notes"]').val() == '')
+			{
+				alert('Notes Kosong');
+			}
+			else
+			{
+				$.ajax({
+		            url : "<?php echo site_url('Reportsubnext2/up_notesplannext')?>",
+		            type: "POST",
+		            data: $('#form_note').serialize(),
+		            dataType: "JSON",
+	            	success: function(data)
+	                {
+	                	if(data.status)
+	                	{
+	                		getTables();
+	                		$('#modal_noteAdd').modal('hide');
+	                	}
+	                	else
+	                	{
+	                		alert('Ada Yang Salah');
+	                	}
+	                },
+	            	error: function (jqXHR, textStatus, errorThrown)
+	                {
+	                    alert('Error get data from ajax drop bank');
+	                }
+	            });
+			}
+		}
+		function approve_(id)
+		{
+			$.ajax({
+	            url : "<?php echo site_url('Reportsubnext2/approve_plannext/')?>"+id,
+	            type: "GET",
+	            dataType: "JSON",
+            	success: function(data)
+                {
+                	if(data.status)
+                	{
+                		getTables();
+                	}
+                },
+            	error: function (jqXHR, textStatus, errorThrown)
+                {
+                    alert('Error get data from ajax drop bank');
+                }
+            });
+		}
+
 		function hanyaAngka(e, decimal)
 		{
 			var key;

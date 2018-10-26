@@ -873,13 +873,14 @@
                 	{
                 		var tgl_in = Date.parse(data[i]["tgl"]);
                 		var tgl_dl = Date.parse(data[i]["deadline"]);
+                		var btn = (data[i]["id_approve"] != '1')?'<td class="text-center"><button type="button" onclick="edit_('+data[i]["id"]+')" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-edit"></span> <text style="text-transform: capitalize;"> Edit</text></button><button type="button" onclick="hapus_('+data[i]["id"]+')" class="btn btn-default btn-sm" class="btn btn-default" style="text-transform: capitalize;"> <span class="glyphicon glyphicon-trash"></span> Hapus</button></td>':'<td class="text-center"><button type="button" class="btn btn-default btn-sm" disabled><span class="glyphicon glyphicon-edit"></span> <text style="text-transform: capitalize;"> Edit</text></button><button type="button" class="btn btn-default btn-sm" class="btn btn-default" style="text-transform: capitalize;" disabled> <span class="glyphicon glyphicon-trash"></span> Hapus</button></td>';
                 		var $tr = $('<tr>').append(
                 			$('<td class="text-center" data-order="'+tgl_in+'">'+moment(data[i]["tgl"]).locale('id').format('dddd, DD-MM-YYYY')+'</td>'),
                 			$('<td class="text-center">'+data[i]["nama_goals"]+'</td>'),
                 			$('<td class="text-center">'+data[i]["action"]+'</td>'),
                 			$('<td class="text-center" data-order="'+tgl_dl+'">'+data[i]["deadline"]+'</td>'),
                 			$('<td class="text-center">'+data[i]["nama_dept"]+'</td>'),
-                			$('<td class="text-center"><button type="button" onclick="edit_('+data[i]["id"]+')" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-edit"></span> <text style="text-transform: capitalize;"> Edit</text></button><button type="button" onclick="hapus_('+data[i]["id"]+')" class="btn btn-default btn-sm" class="btn btn-default" style="text-transform: capitalize;"> <span class="glyphicon glyphicon-trash"></span> Hapus</button></td>')
+                			$(btn)
                 		).appendTo('#tbcontent');
                 	}
                 	dtables();
