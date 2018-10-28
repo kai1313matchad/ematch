@@ -127,7 +127,7 @@ class Reportsubnext2 extends CI_Controller {
         $key = $this->input->post('subordinat');
         $start = $this->input->post('tglstart');
         $end = $this->input->post('tglend');
-        $data = $this->db->join('dept b','b.id_dept = a.tgs_dept')->join('karyawan c','c.id_karyawan = a.id_karyawan')->where('a.id_karyawan = "'.$key.'" AND a.id_status = "1" AND (tgl BETWEEN "'.$start.'" AND "'.$end.'")')->order_by('a.tgl','asc')->get('kpim_next a')->result();
+        $data = $this->db->join('dept b','b.id_dept = a.tgs_dept')->join('karyawan c','c.id_karyawan = a.id_karyawan')->where('a.id_karyawan = "'.$key.'" AND a.id_status = "1" AND a.id_approve = "0" AND (tgl BETWEEN "'.$start.'" AND "'.$end.'")')->order_by('a.tgl','asc')->get('kpim_next a')->result();
         echo json_encode($data);
     }
 
@@ -155,11 +155,10 @@ class Reportsubnext2 extends CI_Controller {
     function approve_plannext($id)
     {
         $this->app_model->getLogin();
-        $key = $this->input->post('subid_notes');
         $upplan = array(
             'id_approve'=>'1'
         );
-        $this->db->update('kpim_next',$upplan,array('id'=>$key));
+        $this->db->update('kpim_next',$upplan,array('id'=>$id));
         $data['status'] = TRUE;
         echo json_encode($data);
     }

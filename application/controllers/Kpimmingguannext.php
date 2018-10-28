@@ -450,7 +450,7 @@ class Kpimmingguannext extends CI_Controller {
         {
             $gt_perarr[] = $dt->format('Y-m-d');
         }
-        $getplan = $this->db->group_by('tgl')->order_by('tgl asc')->get_where('kpim_next','id_karyawan = "'.$key.'" AND id_status ="1" AND (tgl BETWEEN "'.date('Y-m-d',$gt_mon).'" AND "'.date('Y-m-d',$gt_sat).'")')->result();
+        $getplan = $this->db->group_by('tgl')->order_by('tgl asc')->get_where('kpim_next','id_karyawan = "'.$key.'" AND id_status ="1" AND id_approve = "1" AND (tgl BETWEEN "'.date('Y-m-d',$gt_mon).'" AND "'.date('Y-m-d',$gt_sat).'")')->result();
         $gt_perplan = array();
         foreach ($getplan as $gp)
         {
@@ -497,7 +497,7 @@ class Kpimmingguannext extends CI_Controller {
         {
             $gt_perarr[] = $dt->format('Y-m-d');
         }
-        $getplan = $this->db->group_by('tgl')->order_by('tgl asc')->get_where('kpim_next','id_karyawan = "'.$key.'" AND id_status ="1" AND (tgl BETWEEN "'.date('Y-m-d',$gt_mon).'" AND "'.date('Y-m-d',$gt_sat).'")')->result();
+        $getplan = $this->db->group_by('tgl')->order_by('tgl asc')->get_where('kpim_next','id_karyawan = "'.$key.'" AND id_status ="1" AND id_approve = "1" AND (tgl BETWEEN "'.date('Y-m-d',$gt_mon).'" AND "'.date('Y-m-d',$gt_sat).'")')->result();
         $gt_perplan = array();
         foreach ($getplan as $gp)
         {
@@ -524,7 +524,7 @@ class Kpimmingguannext extends CI_Controller {
         else
         {
             //Update dan Kirim Ke KPIM Mingguan
-            $getplanall = $this->db->order_by('tgl asc')->get_where('kpim_next','id_karyawan = "'.$key.'" AND id_status ="1" AND (tgl BETWEEN "'.date('Y-m-d',$gt_mon).'" AND "'.date('Y-m-d',$gt_sat).'")')->result();
+            $getplanall = $this->db->order_by('tgl asc')->get_where('kpim_next','id_karyawan = "'.$key.'" AND id_status ="1" AND id_approve = "1" AND (tgl BETWEEN "'.date('Y-m-d',$gt_mon).'" AND "'.date('Y-m-d',$gt_sat).'")')->result();
             foreach ($getplanall as $entry)
             {
                 date_default_timezone_set('Asia/Jakarta');

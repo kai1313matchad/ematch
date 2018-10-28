@@ -104,6 +104,8 @@
 				<input type="hidden" name="tglstart" value="<?= $piltglstart ?>">
 				<input type="hidden" name="tglend" value="<?= $piltglend ?>">
 				<h1 style="padding-top: 20px"><center>KPIM Online - Plan Next Week</center></h1><br><br>
+				<input type="hidden" name="strDt" value="<?= $piltglstart; ?>">
+				<input type="hidden" name="endDt" value="<?= $piltglend; ?>">
 				<div class="row">
 					<div class="col-lg-6 text-left">
 						<h4><text style="word-spacing: 20px">Nama </text> <text>: <?php echo $nama->nama_karyawan; ?></text></h4>
@@ -237,8 +239,8 @@
 	<script>
 		$(document).ready(function(){
 			getTables();
-			$('[name="tglStart"]').text(moment(<?= $piltglstart; ?>).locale('id').format('dddd, DD-MM-YYYY'));
-			$('[name="tglEnd"]').text(moment(<?= $piltglend; ?>).locale('id').format('dddd, DD-MM-YYYY'));
+			$('[name="tglStart"]').text(moment($('[name="strDt"]').val()).locale('id').format('dddd, DD-MM-YYYY'));
+			$('[name="tglEnd"]').text(moment($('[name="endDt"]').val()).locale('id').format('dddd, DD-MM-YYYY'));
 		})
 		function getTables()
 		{
