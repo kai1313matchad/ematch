@@ -342,12 +342,13 @@
                     <table id="dataTablenext" class="table table-bordered table-hover table-striped" cellspacing="0" width="100%">
                         <thead class="text-center" style="background-color: #6db1ff">
                             <tr>
-								<th class="text-center">Hari/Tanggal</th>
-								<th class="text-center">Goal</th>
-								<th class="text-center">Description</th>
-								<th class="text-center">Deadline</th>
-								<th class="text-center">Departement</th>
-								<th class="text-center">Action</th>
+								<th class="col-xs-1 text-center">Hari/Tanggal</th>
+								<th class="col-xs-2 text-center">Goal</th>
+								<th class="col-xs-4 text-center">Description</th>
+								<th class="col-xs-1 text-center">Deadline</th>
+								<th class="col-xs-1 text-center">Departement</th>
+								<th class="col-xs-1 text-center">Status</th>
+								<th class="col-xs-2 text-center">Action</th>
                             </tr>
                         </thead>
                         <tbody id="tbcontent"></tbody>
@@ -581,6 +582,28 @@
 		        <div class="modal-footer">
 		        	<button type="button" style="font-family: 'Exo 2', sans-serif;" class="btn btn-default" data-dismiss="modal">Batal</button>
 					<button type="button" style="font-family: 'Exo 2', sans-serif;" name="input"  class="btn btn-primary" onclick="sendaddplan_()">Kirim</button>
+		        </div>
+		    </div>
+		</div>
+	</div>
+	<div class="modal fade" id="modal_note" role="dialog" style="padding-top: 100px;">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+		        	<button type="button" class="close" data-dismiss="modal">&times;</button>
+		          	<h4 class="modal-title text-center" id="myModalLabel"><b>Catatan</b></h4>
+		        </div>
+		        <div class="modal-body" style="background-color: #2372ef; color: white;">
+		        	<div class="row">
+		        		<div class="form-group">
+		        			<div class="col-xs-offset-2 col-xs-8">
+		        				<textarea class="form-control" name="notes" readonly></textarea>
+		        			</div>
+		        		</div>
+		        	</div>
+		       	</div>
+		        <div class="modal-footer">
+		        	<button type="button" style="font-family: 'Exo 2', sans-serif;" class="btn btn-default" data-dismiss="modal">Tutup</button>
 		        </div>
 		    </div>
 		</div>
@@ -874,12 +897,14 @@
                 		var tgl_in = Date.parse(data[i]["tgl"]);
                 		var tgl_dl = Date.parse(data[i]["deadline"]);
                 		var btn = (data[i]["id_approve"] != '1')?'<td class="text-center"><button type="button" onclick="edit_('+data[i]["id"]+')" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-edit"></span> <text style="text-transform: capitalize;"> Edit</text></button><button type="button" onclick="hapus_('+data[i]["id"]+')" class="btn btn-default btn-sm" class="btn btn-default" style="text-transform: capitalize;"> <span class="glyphicon glyphicon-trash"></span> Hapus</button></td>':'<td class="text-center"><button type="button" class="btn btn-default btn-sm" disabled><span class="glyphicon glyphicon-edit"></span> <text style="text-transform: capitalize;"> Edit</text></button><button type="button" class="btn btn-default btn-sm" class="btn btn-default" style="text-transform: capitalize;" disabled> <span class="glyphicon glyphicon-trash"></span> Hapus</button></td>';
+                		var sts = (data[i]["id_approve"] != '0')?'<td class="text-center"><button type="button" class="btn btn-success btn-sm"><span class="glyphicon glyphicon-ok"></span></button><br><button type="button" onclick="note_('+data[i]["id"]+')" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-pencil"></span>Note</button></td>':'<td class="text-center"><button type="button" class="btn btn-danger btn-sm"><span class="glyphicon glyphicon-remove"></span></button><br><button type="button" onclick="note_('+data[i]["id"]+')" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-pencil"></span>Note</button></td>';
                 		var $tr = $('<tr>').append(
                 			$('<td class="text-center" data-order="'+tgl_in+'">'+moment(data[i]["tgl"]).locale('id').format('dddd, DD-MM-YYYY')+'</td>'),
                 			$('<td class="text-center">'+data[i]["nama_goals"]+'</td>'),
                 			$('<td class="text-center">'+data[i]["action"]+'</td>'),
-                			$('<td class="text-center" data-order="'+tgl_dl+'">'+data[i]["deadline"]+'</td>'),
+                			$('<td class="text-center" data-order="'+tgl_dl+'">'+moment(data[i]["deadline"]).locale('id').format('dddd, DD-MM-YYYY')+'</td>'),
                 			$('<td class="text-center">'+data[i]["nama_dept"]+'</td>'),
+                			$(sts),
                 			$(btn)
                 		).appendTo('#tbcontent');
                 	}
@@ -1068,8 +1093,22 @@
             });
         }
 
-        function pick_goalsedit(id)
+        function note_(id)
         {
+        	$.ajax({
+	            url : "<?php echo site_url('Kpimmingguannext/get_plannext/')?>"+id,
+	            type: "GET",
+	            dataType: "JSON",
+            	success: function(data)
+                {
+                	$('[name="notes"]').val(data.note);
+                	$('#modal_note').modal('show');
+                },
+            	error: function (jqXHR, textStatus, errorThrown)
+                {
+                    alert('Error get data from ajax drop bank');
+                }
+            });
         }
 
         function hapus_(id)

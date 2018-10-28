@@ -187,7 +187,7 @@ class Kpimmingguannext extends CI_Controller {
             'deadline'=>$this->input->post('deadline'),
             'tgs_dept'=>$this->input->post('tgs_dept'),
             'id_status'=>'1',
-            'id_approve'=>'1'
+            'id_approve'=>'0'
         );
 
         $libur = $this->M_pengumuman->ambil_libur()->result();
@@ -254,7 +254,7 @@ class Kpimmingguannext extends CI_Controller {
             'deadline'=>$this->input->post('dl_plan'),
             'tgs_dept'=>$this->input->post('tgs_dept_plan'),
             'id_status'=>'1',
-            'id_approve'=>'1'
+            'id_approve'=>'0'
         );
         $this->db->update('kpim_next',$upd,array('id'=>$id));
         $data['status'] = TRUE;
