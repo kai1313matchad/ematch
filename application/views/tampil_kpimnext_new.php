@@ -298,7 +298,7 @@
 					<div class="col-sm-4 col-xs-4">
 						<div class="form-group">
 							<select name="tgs_dept"  id="pilihdept" class="form-control" data-live-search="true">
-								<option value="all">-- Pilih Dept --</option>
+								<option value="">-- Pilih Dept --</option>
 								<?php foreach ($isinamadept->result() as $key): ?>
 								<option value="<?php echo $key->id_dept;?>"> <?php echo $key->nama_dept;?></option>
 								<?php endforeach ?>
@@ -468,7 +468,7 @@
 		        				<h4>Goals</h4>
 		        			</div>
 		        			<div class="col-sm-8">
-		        				<!-- <input type="text" name="goals_plan" class="form-control" readonly> -->
+		        				<input type="hidden" name="goals_plan" class="form-control" value="0">
 		        				<select name="goals_plan" id="pilihgoals_plan" class="form-control" data-live-search="true">
 		        				</select>
 		        			</div>
@@ -638,7 +638,6 @@
 			$('#pilihdept').change(function(){
                 if($('#pilihdept option:selected').val() != '')
                 {
-                    // drop_goals($('#pilihdept option:selected').val());
                     modal_goals($('#pilihdept option:selected').val());
                 }
             });
@@ -648,15 +647,21 @@
                     drop_goals($('#pilihdept_plan option:selected').val());
                 }
             });
+            $('#pilihgoals_plan').change(function(){
+                if($('#pilihgoals_plan option:selected').val() != '')
+                {
+                    get_dledit($('#pilihgoals_plan option:selected').val());
+                }
+            });
             // $('#konten').change(function(){
             //     if($('#konten option:selected').val() != '')
             //     {
             //         get_dl($('#konten option:selected').val());
             //     }
             // });
-            // $('#tgl_input').on('dp.change', function(e){
-            // 	get_dl(($('#konten option:selected').val()!='')?$('#konten option:selected').val():0);
-            // });
+            $('#tgl_input').on('dp.change', function(e){
+            	get_dl(($('[name="goalsId"]').val()!='')?$('[name="goalsId"]').val():0);
+            });
 		})
 
 		function chkPlan()
@@ -962,7 +967,7 @@
       		$("#dtbGoals").dataTable().fnDestroy();
       		$('#tbgoalcontent').empty();
       		var id = $('#pilihdept option:selected').val();
-      		if(id!='all')
+      		if(id!='')
       		{
       			$.ajax({
 		            url : "<?php echo site_url('karyawan/getbobot2_/')?>"+id,
@@ -1005,6 +1010,7 @@
                 {
                 	$('[name="goalsNm"]').val(data.nama);
                 	$('[name="goalsId"]').val(data.id_bobot);
+                	get_dl(id);
                 	$('#modal_goals').modal('hide');
                 },
             	error: function (jqXHR, textStatus, errorThrown)
@@ -1016,13 +1022,13 @@
 
 		function drop_goals(id)
         {
+        	$('#pilihgoals_plan').empty();
             $.ajax({
 	            url : "<?php echo site_url('karyawan/getbobot_/')?>"+id,
 	            type: "GET",
 	            dataType: "JSON",
             	success: function(data)
                 {
-                    $('#pilihgoals_plan').empty();
                     var select = document.getElementById('pilihgoals_plan');
                     var option;
                     option = document.createElement('option');
@@ -1055,9 +1061,42 @@
 	            dataType: "JSON",
             	success: function(data)
                 {
-                	var tglinput = $('[name="tgl"]').val();
-                	var dl = (data.sts_bobot != '0')?data.custom_dl:moment(tglinput).add(data.fix_dl,'days').locale('id').format('YYYY-MM-DD');
+                	var tglinput = ($('[name="tgl"]').val()!='')?$('[name="tgl"]').val():moment(new Date()).add(1,'days').locale('id').format('YYYY-MM-DD');
+                	if(data.sts_bobot != null)
+                	{
+                		var dl = (data.sts_bobot != '0')?data.custom_dl:moment(tglinput).add(data.fix_dl,'days').locale('id').format('YYYY-MM-DD');
+                	}
+                	else
+                	{
+                		var dl = moment(tglinput).add(-1,'days').locale('id').format('YYYY-MM-DD');
+                	}
                    	$('[name="deadline"]').val(dl);
+                },
+            	error: function (jqXHR, textStatus, errorThrown)
+                {
+                    alert('Pilih Goals');
+                }
+            });
+        }
+
+        function get_dledit(id)
+        {
+        	$.ajax({
+	            url : "<?php echo site_url('karyawan/getdl_/')?>"+id,
+	            type: "GET",
+	            dataType: "JSON",
+            	success: function(data)
+                {
+                	var tglinput = ($('[name="tgl_plan"]').val()!='')?$('[name="tgl_plan"]').val():moment(new Date()).add(1,'days').locale('id').format('YYYY-MM-DD');
+                	if(data.sts_bobot != null)
+                	{
+                		var dl = (data.sts_bobot != '0')?data.custom_dl:moment(tglinput).add(data.fix_dl,'days').locale('id').format('YYYY-MM-DD');
+                	}
+                	else
+                	{
+                		var dl = moment(tglinput).add(-1,'days').locale('id').format('YYYY-MM-DD');
+                	}
+                   	$('[name="dl_plan"]').val(dl);
                 },
             	error: function (jqXHR, textStatus, errorThrown)
                 {
@@ -1084,7 +1123,6 @@
                 	$('[name="desc_plan"]').val(data.action);
                 	$('[name="dl_plan"]').val(data.deadline);
                 	$('#modal_edit').modal('show');
-                	$('select#pilihgoals_plan').val(data.id_bobot);
                 },
             	error: function (jqXHR, textStatus, errorThrown)
                 {

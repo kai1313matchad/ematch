@@ -474,11 +474,18 @@
 							<?php endforeach ?>
 						</select>
 					</div>
-					<div class="form-group-group">
+					<div class="form-group">
 						<div id="jdl_konten" class="text-left" style="margin:0px 0 0 5px;">Goal/Pekerjaan :</div>
-						<select id="konten" class="form-control" name="goals" data-live-search="true">
+						<div class="input-group">
+					        <input type="text" name="goalsNm" class="form-control">
+					        <input type="hidden" name="goalsId">
+					        <span class="input-group-btn">
+								<button id="open" type="button" class="btn btn-primary" onclick="openGoals()" style="text-transform: capitalize; ">Open</button>
+					    	</span>
+					    </div>
+						<!-- <select id="konten" class="form-control" name="goals" data-live-search="true">
 					    	<option value="all">-- Pilih salah Satu --</option>
-						</select>
+						</select> -->
 					</div>
 				</div>
 				<div class="col-sm-3 col-xs-3">
@@ -945,6 +952,35 @@
 		    </div>
 		</div>
 	</div>
+	<div class="modal fade" id="modal_goals" role="dialog" style="padding-top: 100px;">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header" style="background-color: #6db1ff">
+		        	<button type="button" class="close" data-dismiss="modal">&times;</button>
+		          	<h4 class="modal-title text-center" id="myModalLabel"><b>Edit</b></h4>
+		        </div>
+		        <div class="modal-body">
+		        	<div class="row">
+		        		<div class="col-sm-12 col-xs-12 table-responsive">
+		        			<table id="dtbGoals" class="table table-bordered table-hover table-striped" cellspacing="0" width="100%">
+		        				<thead style="background-color: #6db1ff">
+		        					<tr>
+		        						<td class="text-center">Dept.</td>
+		        						<td class="text-center">Goal/Pekerjaan</td>
+		        						<td class="text-center">Action</td>
+		        					</tr>
+		        				</thead>
+		        				<tbody id="tbgoalcontent"></tbody>
+		        			</table>
+		        		</div>
+		        	</div>
+		       	</div>
+		        <div class="modal-footer" style="background-color: #6db1ff">
+		        	<button type="button" style="font-family: 'Exo 2', sans-serif;" class="btn btn-default" data-dismiss="modal">Close</button>
+		        </div>
+		    </div>
+		</div>
+	</div>
 	<!-- JS -->
 	<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -976,7 +1012,8 @@
 			$('#pilihdept').change(function(){
                 if($('#pilihdept option:selected').val() != '')
                 {
-                    drop_goals($('#pilihdept option:selected').val());
+                    // drop_goals($('#pilihdept option:selected').val());
+                    modal_goals($('#pilihdept option:selected').val());
                 }
             });
             $('#konten').change(function(){
@@ -999,6 +1036,12 @@
 				$(".ini2").show(1000);
 			});
 		})
+
+		function cek_nilai()
+		{
+			var tgl = Date.Parse($('[name="tglsekarang"]').val());
+			var dl = Date.Parse($('[name="deadline"]').val());
+		}
 
 		function add_kpim()
 		{
@@ -1140,6 +1183,92 @@
             });
 		}
 
+		function modal_goals(id)
+      	{
+      		$("#dtbGoals").dataTable().fnDestroy();
+      		$('#tbgoalcontent').empty();
+      		$.ajax({
+	            url : "<?php echo site_url('karyawan/getbobot2_/')?>"+id,
+	            type: "GET",
+	            dataType: "JSON",
+            	success: function(data)
+                {
+                    for (var i = 0; i < data.length; i++)
+                    {
+                    	var $tr = $('<tr>').append(
+                    		$('<td class="text-center">'+data[i]["nama_dept"]+'</td>'),
+                    		$('<td class="text-center">'+data[i]["nama"]+'</td>'),
+                    		$('<td class="text-center"><button type="button" onclick="pickGoals('+data[i]["id_bobot"]+')" class="btn btn-primary btn-sm" class="btn btn-default" style="text-transform: capitalize;"> Pilih</button></td>')
+                    		).appendTo('#tbgoalcontent');
+                    }
+                    $('#dtbGoals').DataTable({});
+                    $('#modal_goals').modal('show');
+                },
+            	error: function (jqXHR, textStatus, errorThrown)
+                {
+                    alert('Error get data for goals list');
+                }
+            });
+      	}
+
+      	function openGoals()
+      	{
+      		$("#dtbGoals").dataTable().fnDestroy();
+      		$('#tbgoalcontent').empty();
+      		var id = $('#pilihdept option:selected').val();
+      		if(id!='')
+      		{
+      			$.ajax({
+		            url : "<?php echo site_url('karyawan/getbobot2_/')?>"+id,
+		            type: "GET",
+		            dataType: "JSON",
+	            	success: function(data)
+	                {
+	                    $('#tbgoalcontent').empty();
+	                    $("#dtbGoals").dataTable().fnDestroy();
+	                    for (var i = 0; i < data.length; i++)
+	                    {
+	                    	var $tr = $('<tr>').append(
+	                    		$('<td class="text-center">'+data[i]["nama_dept"]+'</td>'),
+	                    		$('<td class="text-center">'+data[i]["nama"]+'</td>'),
+	                    		$('<td class="text-center"><button type="button" onclick="pickGoals('+data[i]["id_bobot"]+')" class="btn btn-primary btn-sm" class="btn btn-default" style="text-transform: capitalize;"> Pilih</button></td>')
+	                    		).appendTo('#tbgoalcontent');
+	                    }
+	                    $('#dtbGoals').DataTable({});
+	                    $('#modal_goals').modal('show');
+	                },
+	            	error: function (jqXHR, textStatus, errorThrown)
+	                {
+	                    alert('Error get data for goals list');
+	                }
+	            });
+      		}
+      		else
+      		{
+      			alert('Pilih Dept. Terlebih Dahulu');
+      		}
+      	}
+
+      	function pickGoals(id)
+      	{
+      		$.ajax({
+	            url : "<?php echo site_url('karyawan/getdl_/')?>"+id,
+	            type: "GET",
+	            dataType: "JSON",
+            	success: function(data)
+                {
+                	$('[name="goalsNm"]').val(data.nama);
+                	$('[name="goalsId"]').val(data.id_bobot);
+                	get_dl(id);
+                	$('#modal_goals').modal('hide');
+                },
+            	error: function (jqXHR, textStatus, errorThrown)
+                {
+                    alert('Pilih Goals');
+                }
+            });
+      	}
+
 		function drop_goals(id)
         {
             $.ajax({
@@ -1181,33 +1310,20 @@
 	            dataType: "JSON",
             	success: function(data)
                 {
-                	var tglinput = $('[name="tgl"]').val();
-                	var dl = (data.sts_bobot != '0')?data.custom_dl:moment(tglinput).add(data.fix_dl,'days').locale('id').format('YYYY-MM-DD');
+                	var tglinput = ($('[name="tgl_sekarang"]').val()!='')?$('[name="tgl_sekarang"]').val():moment(new Date()).add(1,'days').locale('id').format('YYYY-MM-DD');
+                	if(data.sts_bobot != null)
+                	{
+                		var dl = (data.sts_bobot != '0')?data.custom_dl:moment(tglinput).add(data.fix_dl,'days').locale('id').format('YYYY-MM-DD');
+                	}
+                	else
+                	{
+                		var dl = moment(tglinput).add(-1,'days').locale('id').format('YYYY-MM-DD');
+                	}
                    	$('[name="deadline"]').val(dl);
-                   	if ($("#deadline").val() > $("#tgl_sekarang").val())
-					{
-						$("#intime").show(1000);
-						$("#overtime").hide(1000);
-						$("#ontime").hide(1000);
-					}
-					if ($("#deadline").val() == $("#tgl_sekarang").val())
-					{
-						$("#ontime").show(1000);
-						$("#overtime").hide(1000);
-						$("#intime").hide(1000);
-					}
-					if ($("#deadline").val() < $("#tgl_sekarang").val())
-					{
-						$("#overtime").show(1000);
-						$("#intime").hide(1000);
-						$("#ontime").hide(1000);
-					}
-					$("#usulnilai").val('');
-					$("input[type='radio'][name='usulnilai']" ).prop('checked', false);
                 },
             	error: function (jqXHR, textStatus, errorThrown)
                 {
-                    alert('Error get data from ajax drop bank');
+                    alert('Pilih Goals');
                 }
             });
         }

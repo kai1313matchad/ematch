@@ -434,6 +434,91 @@ class Karyawan extends CI_Controller {
         $this->load->view('tampil_m_bobot_new',$data);
     }
 
+    public function getallbobot()
+    {
+        $this->app_model->getLogin();
+        $dept = ($this->input->post('deptlist'))?$this->input->post('deptlist'):NULL;
+        $data = ($dept != NULL)?$this->db->join('dept b','b.id_dept = a.id_dept')->where('a.id_dept = "'.$dept.'"')->order_by('a.nama')->get('master_bobot a')->result():$this->db->join('dept b','b.id_dept = a.id_dept')->order_by('b.nama_dept, a.nama')->get('master_bobot a')->result();
+        echo json_encode($data);
+    }
+
+    public function get_bobot($id)
+    {
+        $this->app_model->getLogin();
+        $data = $this->db->join('dept b','b.id_dept = a.id_dept')->get_where('master_bobot a',array('a.id_bobot'=>$id))->row();
+        echo json_encode($data);
+    }
+
+    public function getdl_($id)
+    {
+        $data = $this->db->get_where('master_bobot',array('id_bobot'=>$id))->row();
+        echo json_encode($data);
+    }
+
+    public function simpan_bobot()
+    {
+        $this->app_model->getLogin();
+        date_default_timezone_set('Asia/Jakarta');
+        $dept = $this->input->post('pilihdept');
+        $gls = $this->input->post('nama_pekerjaan');
+        $vlu = $this->input->post('nilai_bobot');
+        $lv = $this->input->post('level[]');
+        $sts = $this->input->post('stsbobot');
+        $fixdl = ($this->input->post('fixdldate') != '')?$this->input->post('fixdldate'):NULL;
+        $custdl = ($this->input->post('custdltgl') != '')?$this->input->post('custdltgl'):NULL;
+        $ins = array(
+            'id_dept'=>$dept,
+            'nama'=>$gls,
+            'bobot'=>$vlu,
+            'tgl_diinput'=>date('Y-m-d H:i:s'),
+            'id_levelakses'=>implode(",", $lv),
+            'tgl_diinput' => date('Y-m-d H:i:s'),
+            'sts_bobot'=>$sts,
+            'fix_dl'=>$fixdl,
+            'custom_dl'=>$custdl
+        );
+        $this->db->insert('master_bobot',$ins);
+        $data['status'] = TRUE;
+        echo json_encode($data);
+    }
+
+    public function upd_bobot()
+    {
+        $this->app_model->getLogin();
+        date_default_timezone_set('Asia/Jakarta');
+        $id = $this->input->post('bobotid');
+        $dept = $this->input->post('pilihdeptedit');
+        $gls = $this->input->post('nama_pekerjaan_edit');
+        $vlu = $this->input->post('nilai_bobot_edit');
+        $lv = $this->input->post('lvedit[]');
+        $sts = $this->input->post('stsbobotedit');
+        $fixdl = ($this->input->post('fixdldateedit') != '')?$this->input->post('fixdldateedit'):NULL;
+        $custdl = ($this->input->post('custdltgledit') != '')?$this->input->post('custdltgledit'):NULL;
+        $upd = array(
+            'id_dept'=>$dept,
+            'nama'=>$gls,
+            'bobot'=>$vlu,
+            'tgl_diinput'=>date('Y-m-d H:i:s'),
+            'id_levelakses'=>implode(",", $lv),
+            'tgl_diinput' => date('Y-m-d H:i:s'),
+            'sts_bobot'=>$sts,
+            'fix_dl'=>$fixdl,
+            'custom_dl'=>$custdl
+        );
+        $this->db->update('master_bobot',$upd,array('id_bobot'=>$id));
+        $data['status'] = TRUE;
+        echo json_encode($data);
+    }
+
+    public function del_bobot($id)
+    {
+        $this->app_model->getLogin();
+        $this->db->where('id_bobot',$id);
+        $this->db->delete('master_bobot');
+        $data['status'] = TRUE;
+        echo json_encode($data);
+    }
+
     public function ambildatabobot(){
 
         // $keydept = $this->session->userdata('id_karyawan');
@@ -495,12 +580,6 @@ class Karyawan extends CI_Controller {
         echo json_encode($data);
     }
 
-    public function getdl_($id)
-    {
-        $data = $this->db->get_where('master_bobot',array('id_bobot'=>$id))->row();
-        echo json_encode($data);
-    }
-
     public function ambildatabobot2(){
 
         $ini_dept = $this->input->post('pilihdept');
@@ -538,32 +617,6 @@ class Karyawan extends CI_Controller {
         );        
         $this->M_karyawanku->simpanbobot($data);
         redirect(base_url(). 'karyawan/bobot' , 'refresh');
-    }
-
-    public function simpan_bobot()
-    {
-        $this->app_model->getLogin();
-        date_default_timezone_set('Asia/Jakarta');
-        $dept = $this->input->post('pilihdept');
-        $gls = $this->input->post('nama_pekerjaan');
-        $vlu = $this->input->post('nilai_bobot');
-        $lv = $this->input->post('level[]');
-        $sts = $this->input->post('stsbobot');
-        $fixdl = ($this->input->post('fixdldate') != '')?$this->input->post('fixdldate'):NULL;
-        $custdl = ($this->input->post('custdltgl') != '')?$this->input->post('custdltgl'):NULL;
-        $ins = array(
-            'id_dept'=>$dept,
-            'nama'=>$gls,
-            'bobot'=>$vlu,
-            'tgl_diinput'=>date('Y-m-d H:i:s'),
-            'id_levelakses'=>implode(",", $lv),
-            'sts_bobot'=>$sts,
-            'fix_dl'=>$fixdl,
-            'custom_dl'=>$custdl
-        );
-        $this->db->insert('master_bobot',$ins);
-        $data['status'] = TRUE;
-        echo json_encode($data);
     }
 
     public function hapusbobot($key){
