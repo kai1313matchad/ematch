@@ -570,7 +570,14 @@ class Karyawan extends CI_Controller {
 
     public function getbobot_($id)
     {
-        $data = ($id != 'all')?$this->db->get_where('master_bobot',array('id_dept'=>$id))->result():$this->db->get('master_bobot')->result();
+        $data = ($id != '')?$this->db->get_where('master_bobot',array('id_dept'=>$id))->result():$this->db->get('master_bobot')->result();
+        echo json_encode($data);
+    }
+
+    public function getbobotbyid_($id)
+    {
+        $key = $this->db->get_where('master_bobot',array('nama'=>$id))->row()->id_dept;
+        $data = $this->db->get_where('master_bobot',array('id_dept'=>$key))->result();
         echo json_encode($data);
     }
 

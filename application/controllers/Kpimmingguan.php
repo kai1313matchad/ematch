@@ -141,6 +141,7 @@ class Kpimmingguan extends CI_Controller {
 
     public function test_()
     {
+        $this->app_model->getLogin();
         $key = $this->session->userdata('id_karyawan');
         $data['inboxblmbaca'] = $this->M_kpimmingguan->inboxblmbaca()->result();
         $data['noteblmbaca'] = $this->M_kpimmingguan->noteblmbaca()->result();
@@ -729,7 +730,7 @@ class Kpimmingguan extends CI_Controller {
             $status_dead = 2;   
         }
 
-        $gls = $this->input->post('goals');
+        $gls = $this->input->post('goalsId');
         $get_glsdet = $this->db->get_where('master_bobot',array('id_bobot'=>$gls))->row();
 
         $ins = array(

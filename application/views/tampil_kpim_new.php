@@ -810,8 +810,14 @@
 		        				<h4>Dept</h4>
 		        			</div>
 		        			<div class="col-sm-8">
-		        				<input type="text" name="dept_kpim" class="form-control" readonly>
+		        				<!-- <input type="text" name="dept_kpim" class="form-control" readonly> -->
 		        				<input type="hidden" name="id_kpim">
+		        				<select name="tgs_dept_edit"  id="pilihdept_edit" class="form-control" data-live-search="true">
+									<option value="">-- Pilih Dept --</option>
+									<?php foreach ($isinamadept->result() as $key): ?>
+									<option value="<?php echo $key->id_dept;?>"> <?php echo $key->nama_dept;?></option>
+									<?php endforeach ?>
+								</select>
 		        			</div>
 		        		</div>
 		        		<div class="row">
@@ -820,6 +826,11 @@
 		        			</div>
 		        			<div class="col-sm-8">
 		        				<input type="text" name="goals_kpim" class="form-control" readonly>
+		        				<input type="hidden" name="goalsId_kpim" class="form-control" readonly>
+		        				<div class="bSelect">
+		        					<select name="goals_edit" id="pilihgoals_edit" class="form-control" data-live-search="true">
+		        					</select>
+		        				</div>
 		        			</div>
 		        		</div>
 		        		<div class="row">
@@ -1012,14 +1023,21 @@
 			$('#pilihdept').change(function(){
                 if($('#pilihdept option:selected').val() != '')
                 {
-                    // drop_goals($('#pilihdept option:selected').val());
                     modal_goals($('#pilihdept option:selected').val());
                 }
             });
-            $('#konten').change(function(){
-                if($('#konten option:selected').val() != '')
+            $('#pilihdept_edit').change(function(){
+            	$('.bSelect').css('display','block');
+            	$('[name="goals_kpim"]').css('display','none');
+                if($('#pilihdept_edit option:selected').val() != '')
                 {
-                    get_dl($('#konten option:selected').val());
+                    drop_goals($('#pilihdept_edit option:selected').val());
+                }
+            });
+            $('#pilihgoals_edit').change(function(){
+                if($('#pilihgoals_edit option:selected').val() != '')
+                {
+                    get_dl_edit($('#pilihgoals_edit option:selected').val());
                 }
             });
 
@@ -1039,37 +1057,98 @@
 
 		function cek_nilai()
 		{
-			var tgl = Date.Parse($('[name="tglsekarang"]').val());
-			var dl = Date.Parse($('[name="deadline"]').val());
+			var tgl = Date.parse($('[name="tgl"]').val());
+			var dl = Date.parse($('[name="deadline"]').val());
+			if(dl < tgl)
+			{
+				$('#overtime').css('display','block');
+				$('#intime').css('display','none');
+				$('#ontime').css('display','none');
+			}
+			else if(dl == tgl)
+			{
+				$('#overtime').css('display','none');
+				$('#intime').css('display','none');
+				$('#ontime').css('display','block');
+			}
+			else if(dl > tgl)
+			{
+				$('#overtime').css('display','none');
+				$('#intime').css('display','block');
+				$('#ontime').css('display','none');
+			}
+			else
+			{
+				$('#overtime').css('display','block');
+				$('#intime').css('display','none');
+				$('#ontime').css('display','none');
+			}
+		}
+
+		function cek_nilai_edit()
+		{
+			var tgl = Date.parse($('[name="tgl_kpim"]').val());
+			var dl = Date.parse($('[name="dl_kpim"]').val());
+			if(dl < tgl)
+			{
+				$('#over_').css('display','block');
+				$('#in_').css('display','none');
+				$('#on_').css('display','none');
+			}
+			else if(dl == tgl)
+			{
+				$('#over_').css('display','none');
+				$('#in_').css('display','none');
+				$('#on_').css('display','block');
+			}
+			else if(dl > tgl)
+			{
+				$('#over_').css('display','none');
+				$('#in_').css('display','block');
+				$('#on_').css('display','none');
+			}
+			else
+			{
+				$('#over_').css('display','block');
+				$('#in_').css('display','none');
+				$('#on_').css('display','none');
+			}
 		}
 
 		function add_kpim()
 		{
-			$.ajax({
-	            url : "<?php echo site_url('Kpimmingguan/add_kpim')?>",
-	            type: "POST",
-	            data: $('form').serialize(),
-	            dataType: "JSON",
-            	success: function(data)
-                {
-                	if(data.status)
-                	{
-                		$("#dataTables").dataTable().fnDestroy();
-                		get_list();
-                		drop_goals(0);
-                		$('#form_kpim')[0].reset();
-                		$('#pilihdept').selectpicker('val','');
-                	}
-                	else
-                	{
-                		var dv = $('<div class="col-sm-12">').append(data.lb_msg).appendTo('#alert_');
-                	}
-                },
-            	error: function (jqXHR, textStatus, errorThrown)
-                {
-                    alert('Error get save data');
-                }
-            });
+			var rs = validate_()
+			if(rs > 0 )
+			{
+				alert('Data Belum Lengkap');
+			}
+			else
+			{
+				$.ajax({
+		            url : "<?php echo site_url('Kpimmingguan/add_kpim')?>",
+		            type: "POST",
+		            data: $('form').serialize(),
+		            dataType: "JSON",
+	            	success: function(data)
+	                {
+	                	if(data.status)
+	                	{
+	                		$("#dataTables").dataTable().fnDestroy();
+	                		get_list();
+	                		$('#form_kpim')[0].reset();
+	                		$('#pilihdept').selectpicker('val','');
+	                	}
+	                	else
+	                	{
+	                		var dv = $('<div class="col-sm-12">').append(data.lb_msg).appendTo('#alert_');
+	                	}
+	                },
+	            	error: function (jqXHR, textStatus, errorThrown)
+	                {
+	                    alert('Error get save data');
+	                }
+	            });
+			}
 		}
 
 		function upd_kpim()
@@ -1085,7 +1164,6 @@
                 	{
                 		$("#dataTables").dataTable().fnDestroy()
                 		get_list();
-                		drop_goals(0);
                 		$('#form_edit')[0].reset();
                 		$('#pilihdept').selectpicker('val','');
                 		$('#modal_edit').modal('hide');
@@ -1115,7 +1193,6 @@
                 	{
                 		$("#dataTables").dataTable().fnDestroy()
                 		get_list();
-                		drop_goals(0);
                 		$('#form_edit')[0].reset();
                 		$('#pilihdept').selectpicker('val','');
                 		$('#modal_hapus').modal('hide');
@@ -1277,8 +1354,8 @@
 	            dataType: "JSON",
             	success: function(data)
                 {
-                    $('#konten').empty();
-                    var select = document.getElementById('konten');
+                    $('#pilihgoals_edit').empty();
+                    var select = document.getElementById('pilihgoals_edit');
                     var option;
                     option = document.createElement('option');
                         option.value = '';
@@ -1290,10 +1367,10 @@
                         option.text = data[i]["nama"];
                         select.add(option);
                     }
-                    $('#konten').selectpicker({
+                    $('#pilihgoals_edit').selectpicker({
                         dropupAuto: false
                     });
-                    $('#konten').selectpicker('refresh');
+                    $('#pilihgoals_edit').selectpicker('refresh');
                 },
             	error: function (jqXHR, textStatus, errorThrown)
                 {
@@ -1310,7 +1387,7 @@
 	            dataType: "JSON",
             	success: function(data)
                 {
-                	var tglinput = ($('[name="tgl_sekarang"]').val()!='')?$('[name="tgl_sekarang"]').val():moment(new Date()).add(1,'days').locale('id').format('YYYY-MM-DD');
+                	var tglinput = ($('[name="tgl"]').val()!='')?$('[name="tgl"]').val():moment(new Date()).add(1,'days').locale('id').format('YYYY-MM-DD');
                 	if(data.sts_bobot != null)
                 	{
                 		var dl = (data.sts_bobot != '0')?data.custom_dl:moment(tglinput).add(data.fix_dl,'days').locale('id').format('YYYY-MM-DD');
@@ -1320,6 +1397,36 @@
                 		var dl = moment(tglinput).add(-1,'days').locale('id').format('YYYY-MM-DD');
                 	}
                    	$('[name="deadline"]').val(dl);
+                   	cek_nilai();
+                },
+            	error: function (jqXHR, textStatus, errorThrown)
+                {
+                    alert('Pilih Goals');
+                }
+            });
+        }
+
+        function get_dl_edit(id)
+        {
+        	$.ajax({
+	            url : "<?php echo site_url('karyawan/getdl_/')?>"+id,
+	            type: "GET",
+	            dataType: "JSON",
+            	success: function(data)
+                {
+                	var tglinput = ($('[name="tgl_kpim"]').val()!='')?$('[name="tgl_kpim"]').val():moment(new Date()).add(1,'days').locale('id').format('YYYY-MM-DD');
+                	if(data.sts_bobot != null)
+                	{
+                		var dl = (data.sts_bobot != '0')?data.custom_dl:moment(tglinput).add(data.fix_dl,'days').locale('id').format('YYYY-MM-DD');
+                	}
+                	else
+                	{
+                		var dl = moment(tglinput).add(-1,'days').locale('id').format('YYYY-MM-DD');
+                	}
+                   	$('[name="dl_kpim"]').val(dl);
+                   	$('[name="goals_kpim"]').val(data.nama_goals);
+                   	$('[name="goalsId_kpim"]').val(data.id_bobot);
+                   	cek_nilai_edit();
                 },
             	error: function (jqXHR, textStatus, errorThrown)
                 {
@@ -1330,6 +1437,8 @@
 
         function edit_(id)
         {
+        	$('.bSelect').hide();
+        	$('[name="goals_kpim"]').css('display','block');
         	$.ajax({
 	            url : "<?php echo site_url('Kpimmingguan/get_kpim/')?>"+id,
 	            type: "GET",
@@ -1338,7 +1447,10 @@
                 {
                 	$('[name="id_kpim"]').val(data.id);
                 	$('[name="tgl_kpim"]').val(data.tgl);
-                	$('[name="dept_kpim"]').val(data.nama_dept);
+                	$('select#pilihdept_edit').val(data.tgs_dept);
+                	$('#pilihdept_edit').selectpicker('refresh');
+                	// $('[name="dept_kpim"]').val(data.nama_dept);
+                	$('[name="goalsId_kpim"]').val('');
                 	$('[name="goals_kpim"]').val(data.nama_goals);
                 	$('[name="desc_kpim"]').val(data.action);
                 	$('[name="kendala_kpim"]').val(data.kendala);
@@ -1362,6 +1474,7 @@
 						$("#in_").hide(1000);
 						$("#on_").hide(1000);
 					}
+					// drop_goals();
 					$("input[type='radio'][name='nilai_edit']" ).prop('checked', false);
 					$('[name="nilai_edit"][value="'+data.usulnilai+'"]').prop('checked', true);
                 	$('#modal_edit').modal('show');
@@ -1377,6 +1490,47 @@
         {
         	$('[name="id_kpim_hps"]').val(id);
         	$('#modal_hapus').modal('show');
+        }
+
+        function validate_()
+        {
+        	var cou = 0;
+        	var date1 = $('[name="tgl"]').val();
+            if (date1 == '')
+            {
+                cou = cou+1;
+            }
+            var dept = $('[name="tgs_dept"]').val();
+            if (dept == '')
+            {
+                cou = cou+1;
+            }
+            var goals = $('[name="goalsNm"]').val();
+            if (goals == '')
+            {
+                cou = cou+1;
+            }
+            var act = $('[name="action"]').val();
+            if (act == '')
+            {
+                cou = cou+1;
+            }
+            var res = $('[name="result"]').val();
+            if (res == '')
+            {
+                cou = cou+1;
+            }
+            var dl = $('[name="deadline"]').val();
+            if (dl == '')
+            {
+                cou = cou+1;
+            }
+            var poi = $('[name="usulnilai"]:checked').length;
+            if (poi < 1)
+            {
+                cou = cou+1;
+            }
+            return cou;
         }
 	</script>
 </body>

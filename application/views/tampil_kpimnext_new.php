@@ -456,7 +456,7 @@
 		        				<!-- <input type="text" name="dept_plan" class="form-control" readonly> -->
 		        				<input type="hidden" name="id_plan">
 		        				<select name="tgs_dept_plan"  id="pilihdept_plan" class="form-control" data-live-search="true">
-									<option value="all">-- Pilih Dept --</option>
+									<option value="">-- Pilih Dept --</option>
 									<?php foreach ($isinamadept->result() as $key): ?>
 									<option value="<?php echo $key->id_dept;?>"> <?php echo $key->nama_dept;?></option>
 									<?php endforeach ?>
@@ -1164,7 +1164,7 @@
                 cou = cou+1;
             }
             var dept = $('[name="tgs_dept"]').val();
-            if (dept == 'all')
+            if (dept == '')
             {
                 cou = cou+1;
             }
